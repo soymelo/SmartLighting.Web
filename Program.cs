@@ -1,5 +1,6 @@
 using Radzen;
 using SmartLighting.Web.Components;
+using SmartLighting.Web.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -7,6 +8,13 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 builder.Services.AddRadzenComponents();
+builder.Services.AddHttpClient<IApiClient, ApiClient>((services, httpClient) =>
+{
+    var baseUrl = services.GetRequiredService<IConfiguration>()["Api:BaseUrl"]
+        ?? throw new InvalidOperationException("A configuração 'Api:BaseUrl' não foi definida.");
+
+    httpClient.BaseAddress = new Uri(baseUrl, UriKind.Absolute);
+});
 
 var app = builder.Build();
 

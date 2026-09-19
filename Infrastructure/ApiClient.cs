@@ -1,0 +1,107 @@
+using Microsoft.AspNetCore.WebUtilities;
+using System.Net;
+using System.Text.Json;
+
+namespace SmartLighting.Web.Infrastructure;
+
+public interface IApiClient
+{
+    Task<ApiResponse<TResponse>> GetAsync<TResponse>(string endpoint, IDictionary<string, string?>? parameters = null, CancellationToken ct = default);
+
+    Task<ApiResponse<TResponse>> PostAsync<TRequest, TResponse>(string endpoint, TRequest content, CancellationToken ct = default);
+
+    Task<ApiResponse<TResponse>> PutAsync<TRequest, TResponse>(string endpoint, TRequest content, CancellationToken ct = default);
+
+    Task<ApiResponse<TResponse>> DeleteAsync<TResponse>(string endpoint, CancellationToken ct = default);
+}
+
+public sealed class ApiClient(HttpClient httpClient) : IApiClient
+{
+    private static readonly JsonSerializerOptions JsonOptions = new(JsonSerializerDefaults.Web);
+
+    public Task<ApiResponse<TResponse>> GetAsync<TResponse>(
+        string endpoint, 
+        IDictionary<string, string?>? parameters = null,
+        CancellationToken ct = default)
+    {
+        var requestUri = parameters is null || parameters.Count == 0
+            ? endpoint
+            : QueryHelpers.AddQueryString(endpoint, parameters);
+
+        return SendAsync<TResponse>(HttpMethod.Get, requestUri, ct: ct);
+    }
+
+    public Task<ApiResponse<TResponse>> PostAsync<TRequest, TResponse>(
+        string endpoint,
+        TRequest content,
+        CancellationToken ct = default)
+    {
+        return SendAsync<TResponse>(
+            HttpMethod.Post,
+            endpoint,
+            JsonContent.Create(content, options: JsonOptions),
+            ct);
+    }
+
+    public Task<ApiResponse<TResponse>> PutAsync<TRequest, TResponse>(
+        string endpoint,
+        TRequest content,
+        CancellationToken ct = default)
+    {
+        return SendAsync<TResponse>(
+            HttpMethod.Put,
+            endpoint,
+            JsonContent.Create(content, options: JsonOptions),
+            ct);
+    }
+
+    public Task<ApiResponse<TResponse>> DeleteAsync<TResponse>(
+        string endpoint,
+        CancellationToken ct = default)
+    {
+        return SendAsync<TResponse>(HttpMethod.Delete, endpoint, ct: ct);
+    }
+
+    private async Task<ApiResponse<TResponse>> SendAsync<TResponse>(
+        HttpMethod method,
+        string endpoint,
+        HttpContent? content = null,
+        CancellationToken ct = default)
+    {
+        using var request = new HttpRequestMessage(method, endpoint)
+        {
+            Content = content
+        };
+
+        using var response = await httpClient.SendAsync(request, ct);
+        var responseContent = await response.Content.ReadAsStringAsync(ct);
+
+        if (!response.IsSuccessStatusCode)
+        {
+            var errorMessage = string.IsNullOrWhiteSpace(responseContent)
+                ? response.ReasonPhrase ?? "A API retornou um erro."
+                : responseContent;
+
+            return ApiResponse<TResponse>.Failure(response.StatusCode, errorMessage);
+        }
+
+        var data = string.IsNullOrWhiteSpace(responseContent)
+            ? default
+            : JsonSerializer.Deserialize<TResponse>(responseContent, JsonOptions);
+
+        return ApiResponse<TResponse>.Success(response.StatusCode, data);
+    }
+}
+
+public sealed record ApiResponse<T>(
+    bool IsSuccess,
+    HttpStatusCode StatusCode,
+    T? Data,
+    string? ErrorMessage)
+{
+    public static ApiResponse<T> Success(HttpStatusCode statusCode, T? data) =>
+        new(true, statusCode, data, null);
+
+    public static ApiResponse<T> Failure(HttpStatusCode statusCode, string errorMessage) =>
+        new(false, statusCode, default, errorMessage);
+}

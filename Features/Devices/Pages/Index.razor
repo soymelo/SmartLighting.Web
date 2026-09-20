@@ -29,106 +29,110 @@
         <div class="col-auto">
             <RadzenButton Text="Atualizar"
                           Icon="refresh"
-                          ButtonStyle="ButtonStyle.Light" />
+                          ButtonStyle="ButtonStyle.Light"
+                          Click="@LoadDevicesAsync"
+                          Disabled="@isLoading" />
         </div>
     </div>
 
-    <div class="row mb-3">
-        <div class="col-12 col-xl-10 col-xxl-8">
-            <RadzenBadge Text="1 dispositivo cadastrado" BadgeStyle="BadgeStyle.Info" />
+    @if (isLoading)
+    {
+        <div class="row">
+            <div class="col-12 col-xl-10 col-xxl-8">
+                <RadzenProgressBar Mode="ProgressBarMode.Indeterminate" ShowValue="false" />
+            </div>
         </div>
-    </div>
+    }
+    else if (errorMessage is not null)
+    {
+        <div class="row">
+            <div class="col-12 col-xl-10 col-xxl-8">
+                <RadzenAlert AlertStyle="AlertStyle.Danger">
+                    @errorMessage
+                </RadzenAlert>
+            </div>
+        </div>
+    }
+    else if (devices.Count == 0)
+    {
+        <div class="row">
+            <div class="col-12 col-xl-10 col-xxl-8">
+                <RadzenAlert AlertStyle="AlertStyle.Info">
+                    Nenhum dispositivo cadastrado.
+                </RadzenAlert>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="row mb-3">
+            <div class="col-12 col-xl-10 col-xxl-8">
+                <RadzenBadge Text="@(devices.Count == 1 ? "1 dispositivo cadastrado" : $"{devices.Count} dispositivos cadastrados")"
+                             BadgeStyle="BadgeStyle.Info" />
+            </div>
+        </div>
 
-    <div class="row">
-        <div class="col-12 col-xl-10 col-xxl-8">
+        <div class="row">
+            <div class="col-12 col-xl-10 col-xxl-8">
+                @foreach (var device in devices)
+                {
+                    <RadzenCard class="mb-3">
+                        <div class="row align-items-center g-4">
+                            <div class="col-md">
+                                <div class="d-flex align-items-start gap-3">
+                                    <RadzenIcon Icon="developer_board" Style="font-size: 2.25rem;" />
 
-            <RadzenCard>
+                                    <div>
+                                        <RadzenText TextStyle="TextStyle.H5" class="mb-1">
+                                            @device.Name
+                                        </RadzenText>
 
-                <div class="row align-items-center g-4">
-                    <div class="col-md">
-                        <div class="d-flex align-items-start gap-3">
-                            <RadzenIcon Icon="developer_board" Style="font-size: 2.25rem;" />
+                                        <RadzenText TextStyle="TextStyle.Body2" class="rz-text-secondary">
+                                            Dispositivo responsável pela coleta de telemetria.
+                                        </RadzenText>
+                                    </div>
+                                </div>
+                            </div>
 
-                            <div>
-                                <RadzenText TextStyle="TextStyle.H5" class="mb-1">
-                                    ESP32 — Maquete
-                                </RadzenText>
+                            <div class="col-md-auto">
+                                <RadzenButton Text="Abrir painel"
+                                              Icon="dashboard"
+                                              ButtonStyle="ButtonStyle.Primary"
+                                              Click="@(() => OpenDashboard(device.DeviceId))" />
+                            </div>
+                        </div>
 
-                                <RadzenText TextStyle="TextStyle.Body2" class="rz-text-secondary">
-                                    Dispositivo responsável pelo controle da maquete de iluminação.
+                        <hr class="my-4" />
+
+                        <div class="row g-4">
+                            <div class="col-12">
+                                <div class="d-flex align-items-start gap-2">
+                                    <RadzenIcon Icon="schedule" />
+
+                                    <div>
+                                        <RadzenText TextStyle="TextStyle.Overline" class="rz-text-secondary">
+                                            Último contato
+                                        </RadzenText>
+
+                                        <RadzenText TextStyle="TextStyle.Body1">
+                                            @FormatLastTelemetry(device.LastTelemetryAtUtc)
+                                        </RadzenText>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mt-4">
+                            <div class="col">
+                                <RadzenText TextStyle="TextStyle.Caption" class="rz-text-secondary">
+                                    ID: @device.DeviceId
                                 </RadzenText>
                             </div>
                         </div>
-                    </div>
-
-                    <div class="col-md-auto">
-                        <RadzenButton Text="Abrir painel"
-                                      Icon="dashboard"
-                                      ButtonStyle="ButtonStyle.Primary" />
-                    </div>
-                </div>
-
-                <hr class="my-4" />
-
-                <div class="row g-4">
-                    <div class="col-12 col-md-6">
-                        <div class="d-flex align-items-start gap-2">
-                            <RadzenIcon Icon="schedule" />
-
-                            <div>
-                                <RadzenText TextStyle="TextStyle.Overline" class="rz-text-secondary">
-                                    Último contato
-                                </RadzenText>
-
-                                <RadzenText TextStyle="TextStyle.Body1">
-                                    20/09/2026 às 10:42 UTC
-                                </RadzenText>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-4 col-md-2">
-                        <RadzenText TextStyle="TextStyle.Overline" class="rz-text-secondary">
-                            Zonas
-                        </RadzenText>
-
-                        <RadzenText TextStyle="TextStyle.H5">
-                            4
-                        </RadzenText>
-                    </div>
-
-                    <div class="col-4 col-md-2">
-                        <RadzenText TextStyle="TextStyle.Overline" class="rz-text-secondary">
-                            Sensores
-                        </RadzenText>
-
-                        <RadzenText TextStyle="TextStyle.H5">
-                            8
-                        </RadzenText>
-                    </div>
-
-                    <div class="col-4 col-md-2">
-                        <RadzenText TextStyle="TextStyle.Overline" class="rz-text-secondary">
-                            Luminárias
-                        </RadzenText>
-
-                        <RadzenText TextStyle="TextStyle.H5">
-                            12
-                        </RadzenText>
-                    </div>
-                </div>
-
-                <div class="row mt-4">
-                    <div class="col">
-                        <RadzenText TextStyle="TextStyle.Caption" class="rz-text-secondary">
-                            ID: a0000000-0000-0000-0000-000000000001
-                        </RadzenText>
-                    </div>
-                </div>
-
-            </RadzenCard>
-
+                    </RadzenCard>
+                }
+            </div>
         </div>
-    </div>
+    }
 
 </div>

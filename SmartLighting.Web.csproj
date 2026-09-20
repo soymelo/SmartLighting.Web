@@ -12,9 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Features\Devices\Pages\" />
     <Folder Include="Features\Devices\Components\" />
-    <Folder Include="Features\Devices\Contracts\Dtos\" />
     <Folder Include="Features\Devices\Contracts\ViewModels\" />
   </ItemGroup>
 

@@ -1,0 +1,134 @@
+﻿@page "/devices"
+
+<PageTitle>Dispositivos</PageTitle>
+
+<div class="container-fluid py-3 py-md-4">
+
+    <div class="row mb-4">
+        <div class="col-12">
+            <RadzenBreadCrumb>
+                <ChildContent>
+                    <RadzenBreadCrumbItem Path="/" Text="Home" />
+                    <RadzenBreadCrumbItem Path="/devices" Text="Dispositivos" />
+                </ChildContent>
+            </RadzenBreadCrumb>
+        </div>
+    </div>
+
+    <div class="row align-items-center g-3 mb-4">
+        <div class="col">
+            <RadzenText TextStyle="TextStyle.H3">
+                Dispositivos
+            </RadzenText>
+
+            <RadzenText TextStyle="TextStyle.Body1" class="rz-text-secondary">
+                Acompanhe os dispositivos responsáveis pela coleta de telemetria.
+            </RadzenText>
+        </div>
+
+        <div class="col-auto">
+            <RadzenButton Text="Atualizar"
+                          Icon="refresh"
+                          ButtonStyle="ButtonStyle.Light" />
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col-12 col-xl-10 col-xxl-8">
+            <RadzenBadge Text="1 dispositivo cadastrado" BadgeStyle="BadgeStyle.Info" />
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12 col-xl-10 col-xxl-8">
+
+            <RadzenCard>
+
+                <div class="row align-items-center g-4">
+                    <div class="col-md">
+                        <div class="d-flex align-items-start gap-3">
+                            <RadzenIcon Icon="developer_board" Style="font-size: 2.25rem;" />
+
+                            <div>
+                                <RadzenText TextStyle="TextStyle.H5" class="mb-1">
+                                    ESP32 — Maquete
+                                </RadzenText>
+
+                                <RadzenText TextStyle="TextStyle.Body2" class="rz-text-secondary">
+                                    Dispositivo responsável pelo controle da maquete de iluminação.
+                                </RadzenText>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-auto">
+                        <RadzenButton Text="Abrir painel"
+                                      Icon="dashboard"
+                                      ButtonStyle="ButtonStyle.Primary" />
+                    </div>
+                </div>
+
+                <hr class="my-4" />
+
+                <div class="row g-4">
+                    <div class="col-12 col-md-6">
+                        <div class="d-flex align-items-start gap-2">
+                            <RadzenIcon Icon="schedule" />
+
+                            <div>
+                                <RadzenText TextStyle="TextStyle.Overline" class="rz-text-secondary">
+                                    Último contato
+                                </RadzenText>
+
+                                <RadzenText TextStyle="TextStyle.Body1">
+                                    20/09/2026 às 10:42 UTC
+                                </RadzenText>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-4 col-md-2">
+                        <RadzenText TextStyle="TextStyle.Overline" class="rz-text-secondary">
+                            Zonas
+                        </RadzenText>
+
+                        <RadzenText TextStyle="TextStyle.H5">
+                            4
+                        </RadzenText>
+                    </div>
+
+                    <div class="col-4 col-md-2">
+                        <RadzenText TextStyle="TextStyle.Overline" class="rz-text-secondary">
+                            Sensores
+                        </RadzenText>
+
+                        <RadzenText TextStyle="TextStyle.H5">
+                            8
+                        </RadzenText>
+                    </div>
+
+                    <div class="col-4 col-md-2">
+                        <RadzenText TextStyle="TextStyle.Overline" class="rz-text-secondary">
+                            Luminárias
+                        </RadzenText>
+
+                        <RadzenText TextStyle="TextStyle.H5">
+                            12
+                        </RadzenText>
+                    </div>
+                </div>
+
+                <div class="row mt-4">
+                    <div class="col">
+                        <RadzenText TextStyle="TextStyle.Caption" class="rz-text-secondary">
+                            ID: a0000000-0000-0000-0000-000000000001
+                        </RadzenText>
+                    </div>
+                </div>
+
+            </RadzenCard>
+
+        </div>
+    </div>
+
+</div>

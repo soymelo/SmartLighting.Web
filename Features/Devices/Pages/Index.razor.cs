@@ -50,9 +50,4 @@ public partial class Index
         Nav.NavigateTo($"/devices/{deviceId}");
     }
 
-    private static string FormatLastTelemetry(DateTime? lastTelemetryAtUtc)
-    {
-        return lastTelemetryAtUtc?.ToString("dd/MM/yyyy 'às' HH:mm ")
-            ?? "Nenhuma telemetria recebida";
-    }
 }

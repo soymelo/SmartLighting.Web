@@ -12,7 +12,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Features\Devices\Components\" />
     <Folder Include="Features\Devices\Contracts\ViewModels\" />
   </ItemGroup>
 

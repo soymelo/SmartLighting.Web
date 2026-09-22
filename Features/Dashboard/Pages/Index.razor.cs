@@ -1,9 +1,9 @@
 using System.Net;
 using Microsoft.AspNetCore.Components;
-using SmartLighting.Web.Features.Devices.Dashboard.Application;
-using SmartLighting.Web.Features.Devices.Dashboard.Contracts.Dtos;
+using SmartLighting.Web.Features.Dashboard.Application;
+using SmartLighting.Web.Features.Dashboard.Contracts.Dtos;
 
-namespace SmartLighting.Web.Features.Devices.Dashboard.Pages;
+namespace SmartLighting.Web.Features.Dashboard.Pages;
 
 public partial class Index
 {

@@ -1,4 +1,4 @@
-namespace SmartLighting.Web.Features.Devices.Dashboard.Components;
+namespace SmartLighting.Web.Features.Dashboard.Components;
 
 internal static class DashboardDateFormatter
 {

@@ -1,7 +1,7 @@
 using Radzen;
 using SmartLighting.Web.Components;
+using SmartLighting.Web.Features.Dashboard.Application;
 using SmartLighting.Web.Features.Devices.Application;
-using SmartLighting.Web.Features.Devices.Dashboard.Application;
 using SmartLighting.Web.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);

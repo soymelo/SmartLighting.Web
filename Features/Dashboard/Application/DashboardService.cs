@@ -1,7 +1,7 @@
-using SmartLighting.Web.Features.Devices.Dashboard.Contracts.Dtos;
+using SmartLighting.Web.Features.Dashboard.Contracts.Dtos;
 using SmartLighting.Web.Infrastructure;
 
-namespace SmartLighting.Web.Features.Devices.Dashboard.Application;
+namespace SmartLighting.Web.Features.Dashboard.Application;
 
 public class DashboardService(IApiClient apiClient)
 {

@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Components;
-using SmartLighting.Web.Features.Devices.Dashboard.Contracts.Dtos;
+using SmartLighting.Web.Features.Dashboard.Contracts.Dtos;
 
-namespace SmartLighting.Web.Features.Devices.Dashboard.Components;
+namespace SmartLighting.Web.Features.Dashboard.Components;
 
 public partial class LuminaireStatesTable
 {

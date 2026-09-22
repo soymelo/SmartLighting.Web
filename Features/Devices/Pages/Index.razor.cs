@@ -15,10 +15,10 @@ public partial class Index
 
     protected override async Task OnInitializedAsync()
     {
-        await LoadDevicesAsync();
+        await LoadData();
     }
 
-    private async Task LoadDevicesAsync()
+    private async Task LoadData()
     {
         isLoading = true;
         errorMessage = null;
@@ -34,10 +34,6 @@ public partial class Index
             }
 
             devices = result.Data?.Devices ?? [];
-        }
-        catch (HttpRequestException)
-        {
-            errorMessage = "Não foi possível comunicar com a API.";
         }
         finally
         {

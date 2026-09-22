@@ -1,0 +1,31 @@
+@using SmartLighting.Web.Features.Devices.Dashboard.Contracts.Dtos
+
+@if (rows.Count == 0)
+{
+    <RadzenAlert AlertStyle="AlertStyle.Info">
+        Este dispositivo não possui luminárias cadastradas.
+    </RadzenAlert>
+}
+else
+{
+    <RadzenDataGrid Data="@rows" TItem="LuminaireStateRow" AllowPaging="false" AllowSorting="false">
+        <Columns>
+            <RadzenDataGridColumn TItem="LuminaireStateRow" Property="LuminaireName" Title="Luminária" />
+            <RadzenDataGridColumn TItem="LuminaireStateRow" Property="ZoneName" Title="Zona" />
+
+            <RadzenDataGridColumn TItem="LuminaireStateRow" Title="Brilho">
+                <Template Context="row">
+                    @(row.BrightnessPercentage is null ? "Sem estado recebido" : $"{row.BrightnessPercentage}%")
+                </Template>
+            </RadzenDataGridColumn>
+
+            <RadzenDataGridColumn TItem="LuminaireStateRow" Title="Última atualização">
+                <Template Context="row">
+                    @(row.UpdatedAtUtc is null
+                        ? "Sem estado recebido"
+                        : $"{DashboardDateFormatter.Format(row.UpdatedAtUtc.Value)} (horário de Brasília)")
+                </Template>
+            </RadzenDataGridColumn>
+        </Columns>
+    </RadzenDataGrid>
+}

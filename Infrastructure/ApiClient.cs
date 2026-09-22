@@ -73,35 +73,56 @@ public sealed class ApiClient(HttpClient httpClient) : IApiClient
             Content = content
         };
 
-        using var response = await httpClient.SendAsync(request, ct);
-        var responseContent = await response.Content.ReadAsStringAsync(ct);
-
-        if (!response.IsSuccessStatusCode)
+        try
         {
-            var errorMessage = string.IsNullOrWhiteSpace(responseContent)
-                ? response.ReasonPhrase ?? "A API retornou um erro."
-                : responseContent;
+            using var response = await httpClient.SendAsync(request, ct);
+            var responseContent = await response.Content.ReadAsStringAsync(ct);
 
-            return ApiResponse<TResponse>.Failure(response.StatusCode, errorMessage);
+            if (!response.IsSuccessStatusCode)
+            {
+                var errorMessage = string.IsNullOrWhiteSpace(responseContent)
+                    ? response.ReasonPhrase ?? "A API retornou um erro."
+                    : responseContent;
+
+                return ApiResponse<TResponse>.Failure(response.StatusCode, errorMessage);
+            }
+
+            var data = string.IsNullOrWhiteSpace(responseContent)
+                ? default
+                : JsonSerializer.Deserialize<TResponse>(responseContent, JsonOptions);
+
+            return ApiResponse<TResponse>.Success(response.StatusCode, data);
         }
-
-        var data = string.IsNullOrWhiteSpace(responseContent)
-            ? default
-            : JsonSerializer.Deserialize<TResponse>(responseContent, JsonOptions);
-
-        return ApiResponse<TResponse>.Success(response.StatusCode, data);
+        catch (HttpRequestException)
+        {
+            return ApiResponse<TResponse>.Failure(
+                null,
+                "Não foi possível comunicar com a API.");
+        }
+        catch (TaskCanceledException) when (!ct.IsCancellationRequested)
+        {
+            return ApiResponse<TResponse>.Failure(
+                null,
+                "A API demorou mais do que o esperado para responder.");
+        }
+        catch (JsonException)
+        {
+            return ApiResponse<TResponse>.Failure(
+                null,
+                "A API retornou uma resposta inválida.");
+        }
     }
 }
 
 public sealed record ApiResponse<T>(
     bool IsSuccess,
-    HttpStatusCode StatusCode,
+    HttpStatusCode? StatusCode,
     T? Data,
     string? ErrorMessage)
 {
     public static ApiResponse<T> Success(HttpStatusCode statusCode, T? data) =>
         new(true, statusCode, data, null);
 
-    public static ApiResponse<T> Failure(HttpStatusCode statusCode, string errorMessage) =>
+    public static ApiResponse<T> Failure(HttpStatusCode? statusCode, string errorMessage) =>
         new(false, statusCode, default, errorMessage);
 }

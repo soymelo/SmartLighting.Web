@@ -1,6 +1,7 @@
 using Radzen;
 using SmartLighting.Web.Components;
 using SmartLighting.Web.Features.Devices.Application;
+using SmartLighting.Web.Features.Devices.Dashboard.Application;
 using SmartLighting.Web.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -18,6 +19,7 @@ builder.Services.AddHttpClient<IApiClient, ApiClient>((services, httpClient) =>
 });
 
 builder.Services.AddScoped<DeviceService>();
+builder.Services.AddScoped<DashboardService>();
 
 var app = builder.Build();
 

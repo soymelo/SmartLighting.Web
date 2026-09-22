@@ -1,0 +1,23 @@
+@using SmartLighting.Web.Features.Devices.Dashboard.Contracts.Dtos
+
+@if (rows.Count == 0)
+{
+    <RadzenAlert AlertStyle="AlertStyle.Info">
+        Nenhuma detecção de sensor recebida.
+    </RadzenAlert>
+}
+else
+{
+    <RadzenDataGrid Data="@rows" TItem="SensorEventRow" AllowPaging="false" AllowSorting="false">
+        <Columns>
+            <RadzenDataGridColumn TItem="SensorEventRow" Property="SensorName" Title="Sensor" />
+            <RadzenDataGridColumn TItem="SensorEventRow" Property="ZoneName" Title="Zona" />
+
+            <RadzenDataGridColumn TItem="SensorEventRow" Title="Data da detecção">
+                <Template Context="row">
+                    @DashboardDateFormatter.Format(row.OccurredAtUtc) (horário de Brasília)
+                </Template>
+            </RadzenDataGridColumn>
+        </Columns>
+    </RadzenDataGrid>
+}

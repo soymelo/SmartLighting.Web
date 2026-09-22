@@ -24,6 +24,6 @@ public partial class DeviceCard
         var telemetryAtUtc = DateTime.SpecifyKind(lastTelemetryAtUtc.Value, DateTimeKind.Utc);
         var telemetryAtBrasilia = TimeZoneInfo.ConvertTimeFromUtc(telemetryAtUtc, BrasiliaTimeZone);
 
-        return $"{telemetryAtBrasilia:dd/MM/yyyy 'às' HH:mm} (horário de Brasília)";
+        return $"{telemetryAtBrasilia:dd/MM/yyyy 'às' HH:mm}";
     }
 }

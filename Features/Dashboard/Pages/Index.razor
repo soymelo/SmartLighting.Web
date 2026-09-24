@@ -39,26 +39,26 @@
             </div>
         </div>
     }
-    else if (dashboardError is not null)
+    else if (errorMessage is not null)
     {
         <div class="row">
             <div class="col-12 col-xl-10 col-xxl-8">
                 <RadzenAlert AlertStyle="AlertStyle.Danger">
-                    @dashboardError
+                    @errorMessage
                 </RadzenAlert>
             </div>
         </div>
     }
-    else if (topology is not null)
+    else if (dashboardVM is not null)
     {
         <div class="row align-items-center g-3 mb-4">
             <div class="col">
                 <RadzenText TextStyle="TextStyle.H3">
-                    @topology.Name
+                    @dashboardVM.Name
                 </RadzenText>
 
                 <RadzenText TextStyle="TextStyle.Body2" class="rz-text-secondary">
-                    ID: @topology.DeviceId
+                    ID: @dashboardVM.DeviceId
                 </RadzenText>
             </div>
 
@@ -72,16 +72,7 @@
 
         <div class="row g-4">
             <div class="col-12 col-xl-10 col-xxl-8">
-                @if (dashboard!.TelemetryStatus.Data is not null)
-                {
-                    <LastTelemetryCard LastTelemetryAtUtc="@dashboard.TelemetryStatus.Data.LastTelemetryAtUtc" />
-                }
-                else
-                {
-                    <RadzenAlert AlertStyle="AlertStyle.Danger">
-                        @dashboard!.TelemetryStatus.ErrorMessage
-                    </RadzenAlert>
-                }
+                <LastTelemetryCard LastTelemetryAtUtc="@dashboardVM.LastTelemetryAtUtc" />
             </div>
 
             <div class="col-12">
@@ -90,16 +81,7 @@
                         Estado das luminárias
                     </RadzenText>
 
-                    @if (dashboard!.LuminaireStates.Data is not null)
-                    {
-                        <LuminaireStatesTable Topology="@topology" States="@dashboard.LuminaireStates.Data" />
-                    }
-                    else
-                    {
-                        <RadzenAlert AlertStyle="AlertStyle.Danger">
-                            @dashboard!.LuminaireStates.ErrorMessage
-                        </RadzenAlert>
-                    }
+                    <LuminaireStatesTable Luminaires="@dashboardVM.Luminaires" />
                 </RadzenCard>
             </div>
 
@@ -109,16 +91,7 @@
                         Eventos recentes dos sensores
                     </RadzenText>
 
-                    @if (dashboard!.RecentSensorEvents.Data is not null)
-                    {
-                        <RecentSensorEventsTable Topology="@topology" Events="@dashboard.RecentSensorEvents.Data" />
-                    }
-                    else
-                    {
-                        <RadzenAlert AlertStyle="AlertStyle.Danger">
-                            @dashboard!.RecentSensorEvents.ErrorMessage
-                        </RadzenAlert>
-                    }
+                    <RecentSensorEventsTable Events="@dashboardVM.RecentSensorEvents" />
                 </RadzenCard>
             </div>
         </div>

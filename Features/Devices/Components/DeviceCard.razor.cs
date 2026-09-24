@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
-using SmartLighting.Web.Features.Devices.Contracts.Dtos;
+using SmartLighting.Web.Features.Devices.Contracts.ViewModels;
 
 namespace SmartLighting.Web.Features.Devices.Components;
 
@@ -9,7 +9,7 @@ public partial class DeviceCard
     TimeZoneInfo.FindSystemTimeZoneById("America/Sao_Paulo");
 
     [Parameter, EditorRequired]
-    public required DeviceDto Device { get; set; }
+    public required DeviceVMList Device { get; set; }
 
     [Parameter]
     public EventCallback<Guid> OnOpenDashboard { get; set; }

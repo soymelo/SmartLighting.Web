@@ -1,62 +1,37 @@
 using SmartLighting.Web.Features.Dashboard.Contracts.Dtos;
+using SmartLighting.Web.Features.Dashboard.Contracts.ViewModels;
 using SmartLighting.Web.Infrastructure;
 
 namespace SmartLighting.Web.Features.Dashboard.Application;
 
-public class DashboardService(IApiClient apiClient)
+public class DashboardService(IApiClient apiClient) : ServiceBase
 {
-    public async Task<DashboardResult> GetDashboardAsync(Guid deviceId)
+    public async Task<ServiceResult<DashboardVMList>> GetDashboardAsync(Guid deviceId)
     {
-        var topologyTask = GetDeviceTopologyAsync(deviceId);
-        var telemetryStatusTask = GetDeviceTelemetryStatusAsync(deviceId);
-        var luminaireStatesTask = GetDeviceLuminaireStatesAsync(deviceId);
-        var recentSensorEventsTask = GetRecentSensorEventsAsync(deviceId);
+        var endpoint = $"/devices/{deviceId}/dashboard";
+        var response = await apiClient.GetAsync<GetDeviceDashboardDto>(endpoint);
 
-        await Task.WhenAll(
-            topologyTask,
-            telemetryStatusTask,
-            luminaireStatesTask,
-            recentSensorEventsTask);
-
-        return new DashboardResult(
-            await topologyTask,
-            await telemetryStatusTask,
-            await luminaireStatesTask,
-            await recentSensorEventsTask);
-    }
-
-    public Task<ApiResponse<GetDeviceTopologyDto>> GetDeviceTopologyAsync(Guid deviceId)
-    {
-        var endpoint = $"/devices/{deviceId}/topology";
-
-        return apiClient.GetAsync<GetDeviceTopologyDto>(endpoint);
-    }
-
-    public Task<ApiResponse<GetDeviceTelemetryStatusDto>> GetDeviceTelemetryStatusAsync(Guid deviceId)
-    {
-        var endpoint = $"/devices/{deviceId}/telemetry/status";
-
-        return apiClient.GetAsync<GetDeviceTelemetryStatusDto>(endpoint);
-    }
-
-    public Task<ApiResponse<GetDeviceLuminaireStatesDto>> GetDeviceLuminaireStatesAsync(Guid deviceId)
-    {
-        var endpoint = $"/devices/{deviceId}/telemetry/luminaire-states";
-
-        return apiClient.GetAsync<GetDeviceLuminaireStatesDto>(endpoint);
-    }
-
-    public Task<ApiResponse<GetRecentSensorEventsDto>> GetRecentSensorEventsAsync(Guid deviceId, int limit = 50)
-    {
-        var endpoint = $"/devices/{deviceId}/telemetry/sensor-events";
-
-        var parameters = new Dictionary<string, string?>
-        {
-            ["limit"] = limit.ToString()
-        };
-
-        return apiClient.GetAsync<GetRecentSensorEventsDto>(
-            endpoint,
-            parameters);
+        return FromApiResponse(
+            response,
+            dashboard => new DashboardVMList(
+                dashboard.DeviceId,
+                dashboard.Name,
+                dashboard.LastTelemetryAtUtc,
+                dashboard.Luminaires
+                    .Select(luminaire => new LuminaireStateVMList(
+                        luminaire.LuminaireId,
+                        luminaire.Name,
+                        luminaire.ZoneName,
+                        luminaire.BrightnessPercentage,
+                        luminaire.UpdatedAtUtc))
+                    .ToArray(),
+                dashboard.RecentSensorEvents
+                    .Select(sensorEvent => new SensorEventVMList(
+                        sensorEvent.EventIdentifier,
+                        sensorEvent.SensorId,
+                        sensorEvent.SensorName,
+                        sensorEvent.ZoneName,
+                        sensorEvent.OccurredAtUtc))
+                    .ToArray()));
     }
 }

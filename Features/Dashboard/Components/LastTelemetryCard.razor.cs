@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.Components;
-using SmartLighting.Web.Features.Dashboard.Components;
 
 namespace SmartLighting.Web.Features.Dashboard.Components;
 

@@ -1,7 +1,7 @@
 using System.Net;
 using Microsoft.AspNetCore.Components;
 using SmartLighting.Web.Features.Dashboard.Application;
-using SmartLighting.Web.Features.Dashboard.Contracts.Dtos;
+using SmartLighting.Web.Features.Dashboard.Contracts.ViewModels;
 
 namespace SmartLighting.Web.Features.Dashboard.Pages;
 
@@ -11,19 +11,11 @@ public partial class Index
     [Inject] private DashboardService DashboardService { get; set; } = default!;
 
     [Parameter] public Guid DeviceId { get; set; }
-    
-    //estado geral da página
+
     private bool isLoading = true;
-    private DashboardResult? dashboard;
-
-    private GetDeviceTopologyDto? topology => dashboard?.Topology.Data;
-
-    private bool isNotFound => dashboard?.Topology.StatusCode == HttpStatusCode.NotFound;
-
-    private string? dashboardError => dashboard is null ||
-        (dashboard.Topology.IsSuccess && dashboard.Topology.Data is not null)
-            ? null
-            : dashboard.Topology.ErrorMessage ?? "Não foi possível carregar o dashboard.";
+    private bool isNotFound;
+    private string? errorMessage;
+    private DashboardVMList? dashboardVM;
 
     protected override async Task OnParametersSetAsync()
     {
@@ -33,11 +25,24 @@ public partial class Index
     private async Task LoadData()
     {
         isLoading = true;
-        dashboard = null;
+        isNotFound = false;
+        errorMessage = null;
+        dashboardVM = null;
 
         try
         {
-            dashboard = await DashboardService.GetDashboardAsync(DeviceId);
+            var result = await DashboardService.GetDashboardAsync(DeviceId);
+
+            if (!result.Success)
+            {
+                isNotFound = result.StatusCode == HttpStatusCode.NotFound;
+                errorMessage = isNotFound
+                    ? null
+                    : result.Message ?? "Não foi possível carregar o dashboard.";
+                return;
+            }
+
+            dashboardVM = result.Data;
         }
         finally
         {

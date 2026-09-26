@@ -1,14 +1,20 @@
 <RadzenCard>
     <div class="d-flex align-items-start gap-3">
-        <RadzenIcon Icon="schedule" Style="font-size: 2rem;" />
+        <div class="dashboard-summary-icon">
+            <RadzenIcon Icon="sensors" />
+        </div>
 
-        <div>
-            <RadzenText TextStyle="TextStyle.Overline" class="rz-text-secondary">
+        <div class="min-width-0">
+            <RadzenText TextStyle="TextStyle.Body2" class="rz-text-secondary mb-2">
                 Último contato
             </RadzenText>
 
-            <RadzenText TextStyle="TextStyle.H5">
+            <RadzenText TextStyle="TextStyle.H5" class="dashboard-summary-value mb-1">
                 @LastTelemetryText
+            </RadzenText>
+
+            <RadzenText TextStyle="TextStyle.Caption" class="rz-text-secondary mb-0">
+                @(LastTelemetryAtUtc is null ? "Aguardando comunicação do dispositivo" : "Horário de Brasília")
             </RadzenText>
         </div>
     </div>

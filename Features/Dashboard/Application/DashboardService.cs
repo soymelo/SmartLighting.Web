@@ -9,6 +9,7 @@ public class DashboardService(IApiClient apiClient) : ServiceBase
     public async Task<ServiceResult<DashboardVMList>> GetDashboardAsync(Guid deviceId)
     {
         var endpoint = $"/devices/{deviceId}/dashboard";
+
         var response = await apiClient.GetAsync<GetDeviceDashboardDto>(endpoint);
 
         return FromApiResponse(

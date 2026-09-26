@@ -9,7 +9,7 @@ public class DeviceService(IApiClient apiClient) : ServiceBase
 {
     public async Task<ServiceResult<IReadOnlyCollection<DeviceVMList>>> GetDevicesAsync()
     {
-        const string endpoint = "/devices";
+        var endpoint = "/devices";
 
         var result = await apiClient.GetAsync<GetDevicesDto>(endpoint);
 

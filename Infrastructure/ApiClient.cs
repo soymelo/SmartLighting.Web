@@ -80,9 +80,10 @@ public sealed class ApiClient(HttpClient httpClient) : IApiClient
 
             if (!response.IsSuccessStatusCode)
             {
-                var errorMessage = string.IsNullOrWhiteSpace(responseContent)
-                    ? response.ReasonPhrase ?? "A API retornou um erro."
-                    : responseContent;
+                var errorMessage = GetErrorMessage(
+                    response.StatusCode,
+                    responseContent,
+                    response.ReasonPhrase);
 
                 return ApiResponse<TResponse>.Failure(response.StatusCode, errorMessage);
             }
@@ -112,6 +113,51 @@ public sealed class ApiClient(HttpClient httpClient) : IApiClient
                 "A API retornou uma resposta inválida.");
         }
     }
+
+    private static string GetErrorMessage(
+        HttpStatusCode statusCode,
+        string responseContent,
+        string? reasonPhrase)
+    {
+        if (!string.IsNullOrWhiteSpace(responseContent))
+        {
+            try
+            {
+                var error = JsonSerializer.Deserialize<ApiErrorDto>(responseContent, JsonOptions);
+
+                if (!string.IsNullOrWhiteSpace(error?.Detail))
+                {
+                    return error.Detail;
+                }
+
+                if (!string.IsNullOrWhiteSpace(error?.Title))
+                {
+                    return error.Title;
+                }
+
+                if (!string.IsNullOrWhiteSpace(error?.Message))
+                {
+                    return error.Message;
+                }
+            }
+            catch (JsonException)
+            {
+            }
+        }
+
+        return statusCode switch
+        {
+            HttpStatusCode.BadRequest => "A solicitação possui dados inválidos.",
+            HttpStatusCode.NotFound => "O recurso solicitado não foi encontrado.",
+            HttpStatusCode.Conflict => "Não foi possível concluir a operação devido ao estado atual do recurso.",
+            HttpStatusCode.UnprocessableEntity => "A solicitação não pôde ser processada.",
+            HttpStatusCode.InternalServerError => "Ocorreu um erro inesperado ao processar a solicitação.",
+            HttpStatusCode.ServiceUnavailable => "A API está indisponível no momento.",
+            _ => reasonPhrase ?? "A API retornou um erro ao processar a solicitação."
+        };
+    }
+
+    private sealed record ApiErrorDto(string? Title, string? Detail, string? Message);
 }
 
 public sealed record ApiResponse<T>(

@@ -17,6 +17,9 @@ public partial class Index
     private string? errorMessage;
     private DashboardVMList? dashboardVM;
 
+    private int luminairesWithStateCount =>
+        dashboardVM?.Luminaires.Count(luminaire => luminaire.BrightnessPercentage is not null) ?? 0;
+
     protected override async Task OnParametersSetAsync()
     {
         await LoadData();

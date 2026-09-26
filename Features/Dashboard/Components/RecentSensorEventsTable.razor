@@ -8,16 +8,18 @@
 }
 else
 {
-    <RadzenDataGrid Data="@Events" TItem="SensorEventVMList" AllowPaging="false" AllowSorting="false">
-        <Columns>
-            <RadzenDataGridColumn TItem="SensorEventVMList" Property="SensorName" Title="Sensor" />
-            <RadzenDataGridColumn TItem="SensorEventVMList" Property="ZoneName" Title="Zona" />
+    <div class="overflow-auto">
+        <RadzenDataGrid Data="@Events" TItem="SensorEventVMList" AllowPaging="false" AllowSorting="false" Style="min-width: 500px;">
+            <Columns>
+                <RadzenDataGridColumn TItem="SensorEventVMList" Property="SensorName" Title="Sensor" />
+                <RadzenDataGridColumn TItem="SensorEventVMList" Property="ZoneName" Title="Zona" />
 
-            <RadzenDataGridColumn TItem="SensorEventVMList" Title="Data da detecção">
-                <Template Context="row">
-                    @DashboardDateFormatter.Format(row.OccurredAtUtc) (horário de Brasília)
-                </Template>
-            </RadzenDataGridColumn>
-        </Columns>
-    </RadzenDataGrid>
+                <RadzenDataGridColumn TItem="SensorEventVMList" Title="Data da detecção">
+                    <Template Context="row">
+                        @DashboardDateFormatter.Format(row.OccurredAtUtc) (horário de Brasília)
+                    </Template>
+                </RadzenDataGridColumn>
+            </Columns>
+        </RadzenDataGrid>
+    </div>
 }

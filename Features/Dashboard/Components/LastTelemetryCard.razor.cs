@@ -9,5 +9,5 @@ public partial class LastTelemetryCard
 
     private string LastTelemetryText => LastTelemetryAtUtc is null
         ? "Nenhuma telemetria recebida"
-        : $"{DashboardDateFormatter.Format(LastTelemetryAtUtc.Value)} (horário de Brasília)";
+        : DashboardDateFormatter.Format(LastTelemetryAtUtc.Value);
 }

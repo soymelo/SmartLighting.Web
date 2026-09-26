@@ -1,0 +1,93 @@
+.dashboard-summary-card {
+    --dashboard-accent: #67dcb0;
+    --dashboard-accent-soft: rgba(103, 220, 176, 0.13);
+}
+
+.dashboard-accent-luminaires {
+    --dashboard-accent: #f3bf6b;
+    --dashboard-accent-soft: rgba(243, 191, 107, 0.13);
+}
+
+.dashboard-accent-events {
+    --dashboard-accent: #80aaff;
+    --dashboard-accent-soft: rgba(128, 170, 255, 0.13);
+}
+
+.dashboard-accent-savings {
+    --dashboard-accent: #c9a0f4;
+    --dashboard-accent-soft: rgba(201, 160, 244, 0.13);
+}
+
+.dashboard-summary-card ::deep .rz-card,
+.dashboard-panel ::deep .rz-card {
+    height: 100%;
+    border: 1px solid rgba(255, 255, 255, 0.09);
+    border-radius: 18px;
+    background: linear-gradient(150deg, rgba(255, 255, 255, 0.045), rgba(255, 255, 255, 0.01)),
+                var(--rz-base-background-color, #232731);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
+}
+
+.dashboard-summary-card ::deep .rz-card {
+    min-height: 150px;
+    padding: 1.25rem;
+}
+
+.dashboard-panel ::deep .rz-card {
+    padding: 1.25rem;
+}
+
+.dashboard-summary-card ::deep .dashboard-summary-icon {
+    display: flex;
+    flex: 0 0 48px;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    border-radius: 14px;
+    color: var(--dashboard-accent);
+    background: var(--dashboard-accent-soft);
+}
+
+.dashboard-summary-card ::deep .dashboard-summary-icon .rz-icon {
+    font-size: 1.6rem;
+}
+
+.dashboard-summary-card ::deep .dashboard-summary-value {
+    font-size: clamp(1rem, 1.2vw, 1.3rem);
+    font-weight: 650;
+    line-height: 1.3;
+    overflow-wrap: anywhere;
+}
+
+.dashboard-summary-card ::deep .min-width-0 {
+    min-width: 0;
+}
+
+.dashboard-panel ::deep .dashboard-section-icon {
+    flex: 0 0 auto;
+    color: #92b2fa;
+    font-size: 1.6rem;
+}
+
+.dashboard-map-placeholder {
+    min-height: 340px;
+    padding: 2rem;
+    border: 1px dashed rgba(146, 178, 250, 0.28);
+    border-radius: 14px;
+    background-color: rgba(100, 130, 185, 0.045);
+    background-image: linear-gradient(rgba(255, 255, 255, 0.025) 1px, transparent 1px),
+                      linear-gradient(90deg, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
+    background-size: 30px 30px;
+}
+
+.dashboard-map-placeholder ::deep .dashboard-placeholder-icon {
+    color: #92b2fa;
+    font-size: 2.5rem;
+}
+
+@media (max-width: 575.98px) {
+    .dashboard-map-placeholder {
+        min-height: 250px;
+    }
+}

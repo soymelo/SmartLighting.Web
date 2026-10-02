@@ -1,0 +1,25 @@
+@using SmartLighting.Web.Features.Projects.Contracts.ViewModels
+
+<RadzenCard class="mb-3">
+    <div class="row align-items-center g-4">
+        <div class="col-md">
+            <div class="d-flex align-items-start gap-3">
+                <RadzenIcon Icon="location_city" Style="font-size: 2.25rem;" />
+                <div>
+                    <RadzenText TextStyle="TextStyle.H5" class="mb-1">@Project.Name</RadzenText>
+                    <RadzenText TextStyle="TextStyle.Body2" class="rz-text-secondary mb-0">
+                        Visão geral dos controladores, zonas, luminárias e eventos do projeto.
+                    </RadzenText>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-auto">
+            <RadzenButton Text="Abrir dashboard"
+                          Icon="dashboard"
+                          ButtonStyle="ButtonStyle.Primary"
+                          Click="@(() => OnOpenDashboard.InvokeAsync(Project.ProjectId))" />
+        </div>
+    </div>
+    <hr class="my-4" />
+    <RadzenText TextStyle="TextStyle.Caption" class="rz-text-secondary mb-0">ID: @Project.ProjectId</RadzenText>
+</RadzenCard>

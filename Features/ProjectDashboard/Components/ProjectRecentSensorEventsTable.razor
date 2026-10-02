@@ -1,0 +1,23 @@
+@using SmartLighting.Web.Features.ProjectDashboard.Contracts.ViewModels
+
+@if (Events.Count == 0)
+{
+    <RadzenAlert AlertStyle="AlertStyle.Info">Nenhuma detecção de sensor recebida neste projeto.</RadzenAlert>
+}
+else
+{
+    <div class="overflow-auto">
+        <RadzenDataGrid Data="@Events" TItem="ProjectSensorEventVMList" AllowPaging="false" AllowSorting="false" Style="min-width: 700px;">
+            <Columns>
+                <RadzenDataGridColumn TItem="ProjectSensorEventVMList" Property="SensorName" Title="Sensor" />
+                <RadzenDataGridColumn TItem="ProjectSensorEventVMList" Property="ZoneName" Title="Zona" />
+                <RadzenDataGridColumn TItem="ProjectSensorEventVMList" Property="DeviceName" Title="Controlador de origem" />
+                <RadzenDataGridColumn TItem="ProjectSensorEventVMList" Title="Data da detecção">
+                    <Template Context="row">
+                        @ProjectDashboardDateFormatter.Format(row.OccurredAtUtc) (horário de Brasília)
+                    </Template>
+                </RadzenDataGridColumn>
+            </Columns>
+        </RadzenDataGrid>
+    </div>
+}

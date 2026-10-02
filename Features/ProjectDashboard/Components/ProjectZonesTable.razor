@@ -1,0 +1,18 @@
+@using SmartLighting.Web.Features.ProjectDashboard.Contracts.ViewModels
+
+@if (Zones.Count == 0)
+{
+    <RadzenAlert AlertStyle="AlertStyle.Info">Este projeto não possui zonas cadastradas.</RadzenAlert>
+}
+else
+{
+    <div class="overflow-auto">
+        <RadzenDataGrid Data="@Zones" TItem="ProjectZoneVMList" AllowPaging="false" AllowSorting="false" Style="min-width: 420px;">
+            <Columns>
+                <RadzenDataGridColumn TItem="ProjectZoneVMList" Property="Name" Title="Zona" />
+                <RadzenDataGridColumn TItem="ProjectZoneVMList" Property="SensorCount" Title="Sensores" />
+                <RadzenDataGridColumn TItem="ProjectZoneVMList" Property="LuminaireCount" Title="Luminárias" />
+            </Columns>
+        </RadzenDataGrid>
+    </div>
+}

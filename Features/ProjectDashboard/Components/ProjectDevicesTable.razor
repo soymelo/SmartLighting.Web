@@ -1,0 +1,29 @@
+@using SmartLighting.Web.Features.ProjectDashboard.Contracts.ViewModels
+
+@if (Devices.Count == 0)
+{
+    <RadzenAlert AlertStyle="AlertStyle.Info">Este projeto não possui controladores cadastrados.</RadzenAlert>
+}
+else
+{
+    <div class="overflow-auto">
+        <RadzenDataGrid Data="@Devices" TItem="ProjectDeviceVMList" AllowPaging="false" AllowSorting="false" Style="min-width: 520px;">
+            <Columns>
+                <RadzenDataGridColumn TItem="ProjectDeviceVMList" Property="Name" Title="Controlador" />
+                <RadzenDataGridColumn TItem="ProjectDeviceVMList" Title="Último contato">
+                    <Template Context="row">
+                        @(row.LastTelemetryAtUtc is null
+                            ? "Nenhuma telemetria recebida"
+                            : $"{ProjectDashboardDateFormatter.Format(row.LastTelemetryAtUtc.Value)} (horário de Brasília)")
+                    </Template>
+                </RadzenDataGridColumn>
+                <RadzenDataGridColumn TItem="ProjectDeviceVMList" Title="Detalhes" Width="100px">
+                    <Template Context="row">
+                        <RadzenButton Text="Abrir" ButtonStyle="ButtonStyle.Light" Size="ButtonSize.Small"
+                                      Click="@(() => OpenDevice.InvokeAsync(row.DeviceId))" />
+                    </Template>
+                </RadzenDataGridColumn>
+            </Columns>
+        </RadzenDataGrid>
+    </div>
+}

@@ -1,0 +1,66 @@
+@page "/projects"
+@using SmartLighting.Web.Features.Projects.Components
+
+<PageTitle>Projetos</PageTitle>
+
+<div class="container-fluid py-3 py-md-4">
+    <div class="row mb-4">
+        <div class="col-12">
+            <RadzenBreadCrumb>
+                <ChildContent>
+                    <RadzenBreadCrumbItem Path="/" Text="Home" />
+                    <RadzenBreadCrumbItem Text="Projetos" />
+                </ChildContent>
+            </RadzenBreadCrumb>
+        </div>
+    </div>
+
+    <div class="row align-items-center g-3 mb-4">
+        <div class="col">
+            <RadzenText TextStyle="TextStyle.H3" class="mb-1">Projetos</RadzenText>
+            <RadzenText TextStyle="TextStyle.Body1" class="rz-text-secondary mb-0">
+                Selecione uma instalação para acompanhar sua operação.
+            </RadzenText>
+        </div>
+        <div class="col-auto">
+            <RadzenButton Text="Atualizar"
+                          Icon="refresh"
+                          ButtonStyle="ButtonStyle.Light"
+                          Click="@LoadData"
+                          Disabled="@isLoading" />
+        </div>
+    </div>
+
+    @if (isLoading)
+    {
+        <div class="row"><div class="col-12 col-xl-10 col-xxl-8">
+            <RadzenProgressBar Mode="ProgressBarMode.Indeterminate" ShowValue="false" />
+        </div></div>
+    }
+    else if (errorMessage is not null)
+    {
+        <div class="row"><div class="col-12 col-xl-10 col-xxl-8">
+            <RadzenAlert AlertStyle="AlertStyle.Danger">@errorMessage</RadzenAlert>
+        </div></div>
+    }
+    else if (projects.Count == 0)
+    {
+        <div class="row"><div class="col-12 col-xl-10 col-xxl-8">
+            <RadzenAlert AlertStyle="AlertStyle.Info">Nenhum projeto cadastrado.</RadzenAlert>
+        </div></div>
+    }
+    else
+    {
+        <div class="row mb-3"><div class="col-12 col-xl-10 col-xxl-8">
+            <RadzenBadge Text="@(projects.Count == 1 ? "1 projeto cadastrado" : $"{projects.Count} projetos cadastrados")"
+                         BadgeStyle="BadgeStyle.Info" />
+        </div></div>
+
+        <div class="row"><div class="col-12 col-xl-10 col-xxl-8">
+            @foreach (var project in projects)
+            {
+                <ProjectCard Project="@project" OnOpenDashboard="@OpenDashboard" />
+            }
+        </div></div>
+    }
+</div>

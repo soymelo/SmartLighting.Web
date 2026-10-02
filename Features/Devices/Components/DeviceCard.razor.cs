@@ -12,7 +12,7 @@ public partial class DeviceCard
     public required DeviceVMList Device { get; set; }
 
     [Parameter]
-    public EventCallback<Guid> OnOpenDashboard { get; set; }
+    public EventCallback<Guid> OnOpenDeviceDashboard { get; set; }
 
     private static string FormatLastTelemetry(DateTime? lastTelemetryAtUtc)
     {

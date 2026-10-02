@@ -1,6 +1,6 @@
-namespace SmartLighting.Web.Features.Dashboard.Contracts.ViewModels;
+namespace SmartLighting.Web.Features.DeviceDashboard.Contracts.ViewModels;
 
-public sealed record LuminaireStateVMList(
+public sealed record DeviceLuminaireStateVMList(
     Guid LuminaireId,
     string LuminaireName,
     string ZoneName,

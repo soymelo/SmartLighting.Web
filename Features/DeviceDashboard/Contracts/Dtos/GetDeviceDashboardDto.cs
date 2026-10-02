@@ -1,4 +1,4 @@
-namespace SmartLighting.Web.Features.Dashboard.Contracts.Dtos;
+namespace SmartLighting.Web.Features.DeviceDashboard.Contracts.Dtos;
 
 public sealed record GetDeviceDashboardDto(
     Guid DeviceId,

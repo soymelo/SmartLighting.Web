@@ -1,5 +1,5 @@
 @page "/devices/{DeviceId:guid}"
-@using SmartLighting.Web.Features.Dashboard.Components
+@using SmartLighting.Web.Features.DeviceDashboard.Components
 
 <PageTitle>Dashboard do dispositivo</PageTitle>
 
@@ -49,12 +49,12 @@
             </div>
         </div>
     }
-    else if (dashboardVM is not null)
+    else if (deviceDashboardVM is not null)
     {
         <div class="row align-items-center g-3 mb-4">
             <div class="col-12 col-md">
                 <RadzenText TextStyle="TextStyle.H3" class="mb-1">
-                    @dashboardVM.Name
+                    @deviceDashboardVM.Name
                 </RadzenText>
 
                 <RadzenText TextStyle="TextStyle.Body2" class="rz-text-secondary mb-1">
@@ -62,7 +62,7 @@
                 </RadzenText>
 
                 <RadzenText TextStyle="TextStyle.Caption" class="rz-text-secondary mb-0">
-                    ID: @dashboardVM.DeviceId
+                    ID: @deviceDashboardVM.DeviceId
                 </RadzenText>
             </div>
 
@@ -77,7 +77,7 @@
         <div class="row g-3 g-xl-4 mb-4">
             <div class="col-12 col-md-6 col-xl-3">
                 <div class="dashboard-summary-card dashboard-accent-contact h-100">
-                    <LastTelemetryCard LastTelemetryAtUtc="@dashboardVM.LastTelemetryAtUtc" />
+                    <DeviceLastTelemetryCard LastTelemetryAtUtc="@deviceDashboardVM.LastTelemetryAtUtc" />
                 </div>
             </div>
 
@@ -93,7 +93,7 @@
                                     Luminárias
                                 </RadzenText>
                                 <RadzenText TextStyle="TextStyle.H5" class="dashboard-summary-value mb-1">
-                                    @dashboardVM.Luminaires.Count cadastradas
+                                    @deviceDashboardVM.Luminaires.Count cadastradas
                                 </RadzenText>
                                 <RadzenText TextStyle="TextStyle.Caption" class="rz-text-secondary mb-0">
                                     @luminairesWithStateCount com estado recebido
@@ -116,7 +116,7 @@
                                     Eventos recentes
                                 </RadzenText>
                                 <RadzenText TextStyle="TextStyle.H5" class="dashboard-summary-value mb-1">
-                                    @dashboardVM.RecentSensorEvents.Count exibidos
+                                    @deviceDashboardVM.RecentSensorEvents.Count exibidos
                                 </RadzenText>
                                 <RadzenText TextStyle="TextStyle.Caption" class="rz-text-secondary mb-0">
                                     Até 50 eventos mais recentes
@@ -197,7 +197,7 @@
                             </div>
                         </div>
 
-                        <LuminaireStatesTable Luminaires="@dashboardVM.Luminaires" />
+                        <DeviceLuminaireStatesTable Luminaires="@deviceDashboardVM.Luminaires" />
                     </RadzenCard>
                 </div>
             </div>
@@ -217,7 +217,7 @@
                             </div>
                         </div>
 
-                        <RecentSensorEventsTable Events="@dashboardVM.RecentSensorEvents" />
+                        <DeviceRecentSensorEventsTable Events="@deviceDashboardVM.RecentSensorEvents" />
                     </RadzenCard>
                 </div>
             </div>

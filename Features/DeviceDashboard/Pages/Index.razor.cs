@@ -1,24 +1,24 @@
 using System.Net;
 using Microsoft.AspNetCore.Components;
-using SmartLighting.Web.Features.Dashboard.Application;
-using SmartLighting.Web.Features.Dashboard.Contracts.ViewModels;
+using SmartLighting.Web.Features.DeviceDashboard.Application;
+using SmartLighting.Web.Features.DeviceDashboard.Contracts.ViewModels;
 
-namespace SmartLighting.Web.Features.Dashboard.Pages;
+namespace SmartLighting.Web.Features.DeviceDashboard.Pages;
 
 public partial class Index
 {
     [Inject] private NavigationManager Nav { get; set; } = default!;
-    [Inject] private DashboardService DashboardService { get; set; } = default!;
+    [Inject] private DeviceDashboardService DeviceDashboardService { get; set; } = default!;
 
     [Parameter] public Guid DeviceId { get; set; }
 
     private bool isLoading = true;
     private bool isNotFound;
     private string? errorMessage;
-    private DashboardVMList? dashboardVM;
+    private DeviceDashboardVMList? deviceDashboardVM;
 
     private int luminairesWithStateCount =>
-        dashboardVM?.Luminaires.Count(luminaire => luminaire.BrightnessPercentage is not null) ?? 0;
+        deviceDashboardVM?.Luminaires.Count(luminaire => luminaire.BrightnessPercentage is not null) ?? 0;
 
     protected override async Task OnParametersSetAsync()
     {
@@ -30,11 +30,11 @@ public partial class Index
         isLoading = true;
         isNotFound = false;
         errorMessage = null;
-        dashboardVM = null;
+        deviceDashboardVM = null;
 
         try
         {
-            var result = await DashboardService.GetDashboardAsync(DeviceId);
+            var result = await DeviceDashboardService.GetDeviceDashboardAsync(DeviceId);
 
             if (!result.Success)
             {
@@ -45,7 +45,7 @@ public partial class Index
                 return;
             }
 
-            dashboardVM = result.Data;
+            deviceDashboardVM = result.Data;
         }
         finally
         {

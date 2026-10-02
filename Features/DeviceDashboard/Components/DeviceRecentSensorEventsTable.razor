@@ -1,0 +1,25 @@
+@using SmartLighting.Web.Features.DeviceDashboard.Contracts.ViewModels
+
+@if (Events.Count == 0)
+{
+    <RadzenAlert AlertStyle="AlertStyle.Info">
+        Nenhuma detecção de sensor recebida.
+    </RadzenAlert>
+}
+else
+{
+    <div class="overflow-auto">
+        <RadzenDataGrid Data="@Events" TItem="DeviceSensorEventVMList" AllowPaging="false" AllowSorting="false" Style="min-width: 500px;">
+            <Columns>
+                <RadzenDataGridColumn TItem="DeviceSensorEventVMList" Property="SensorName" Title="Sensor" />
+                <RadzenDataGridColumn TItem="DeviceSensorEventVMList" Property="ZoneName" Title="Zona" />
+
+                <RadzenDataGridColumn TItem="DeviceSensorEventVMList" Title="Data da detecção">
+                    <Template Context="row">
+                        @DeviceDashboardDateFormatter.Format(row.OccurredAtUtc) (horário de Brasília)
+                    </Template>
+                </RadzenDataGridColumn>
+            </Columns>
+        </RadzenDataGrid>
+    </div>
+}

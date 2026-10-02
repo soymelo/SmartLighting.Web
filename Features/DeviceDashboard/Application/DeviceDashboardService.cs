@@ -1,12 +1,12 @@
-using SmartLighting.Web.Features.Dashboard.Contracts.Dtos;
-using SmartLighting.Web.Features.Dashboard.Contracts.ViewModels;
+using SmartLighting.Web.Features.DeviceDashboard.Contracts.Dtos;
+using SmartLighting.Web.Features.DeviceDashboard.Contracts.ViewModels;
 using SmartLighting.Web.Infrastructure;
 
-namespace SmartLighting.Web.Features.Dashboard.Application;
+namespace SmartLighting.Web.Features.DeviceDashboard.Application;
 
-public class DashboardService(IApiClient apiClient) : ServiceBase
+public class DeviceDashboardService(IApiClient apiClient) : ServiceBase
 {
-    public async Task<ServiceResult<DashboardVMList>> GetDashboardAsync(Guid deviceId)
+    public async Task<ServiceResult<DeviceDashboardVMList>> GetDeviceDashboardAsync(Guid deviceId)
     {
         var endpoint = $"/devices/{deviceId}/dashboard";
 
@@ -14,12 +14,12 @@ public class DashboardService(IApiClient apiClient) : ServiceBase
 
         return FromApiResponse(
             response,
-            dashboard => new DashboardVMList(
+            dashboard => new DeviceDashboardVMList(
                 dashboard.DeviceId,
                 dashboard.Name,
                 dashboard.LastTelemetryAtUtc,
                 dashboard.Luminaires
-                    .Select(luminaire => new LuminaireStateVMList(
+                    .Select(luminaire => new DeviceLuminaireStateVMList(
                         luminaire.LuminaireId,
                         luminaire.Name,
                         luminaire.ZoneName,
@@ -27,7 +27,7 @@ public class DashboardService(IApiClient apiClient) : ServiceBase
                         luminaire.UpdatedAtUtc))
                     .ToArray(),
                 dashboard.RecentSensorEvents
-                    .Select(sensorEvent => new SensorEventVMList(
+                    .Select(sensorEvent => new DeviceSensorEventVMList(
                         sensorEvent.EventIdentifier,
                         sensorEvent.SensorId,
                         sensorEvent.SensorName,

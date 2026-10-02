@@ -1,6 +1,6 @@
-namespace SmartLighting.Web.Features.Dashboard.Components;
+namespace SmartLighting.Web.Features.DeviceDashboard.Components;
 
-internal static class DashboardDateFormatter
+internal static class DeviceDashboardDateFormatter
 {
     private static readonly TimeZoneInfo BrasiliaTimeZone =
         TimeZoneInfo.FindSystemTimeZoneById("America/Sao_Paulo");

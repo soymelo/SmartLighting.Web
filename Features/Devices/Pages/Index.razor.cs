@@ -41,7 +41,7 @@ public partial class Index
         }
     }
 
-    private void OpenDashboard(Guid deviceId)
+    private void OpenDeviceDashboard(Guid deviceId)
     {
         Nav.NavigateTo($"/devices/{deviceId}");
     }

@@ -1,13 +1,13 @@
 using Microsoft.AspNetCore.Components;
 
-namespace SmartLighting.Web.Features.Dashboard.Components;
+namespace SmartLighting.Web.Features.DeviceDashboard.Components;
 
-public partial class LastTelemetryCard
+public partial class DeviceLastTelemetryCard
 {
     [Parameter]
     public DateTime? LastTelemetryAtUtc { get; set; }
 
     private string LastTelemetryText => LastTelemetryAtUtc is null
         ? "Nenhuma telemetria recebida"
-        : DashboardDateFormatter.Format(LastTelemetryAtUtc.Value);
+        : DeviceDashboardDateFormatter.Format(LastTelemetryAtUtc.Value);
 }

@@ -15,6 +15,15 @@ public sealed record GetDeviceZoneDto(
     IReadOnlyCollection<GetDeviceSensorDto> Sensors,
     IReadOnlyCollection<GetDeviceLuminaireDto> Luminaires);
 
-public sealed record GetDeviceSensorDto(Guid SensorId, string Name);
+public sealed record GetDeviceSensorDto(
+    Guid SensorId,
+    string Name,
+    int Slot,
+    int GpioNumber);
 
-public sealed record GetDeviceLuminaireDto(Guid LuminaireId, string Name, decimal NominalPowerWatts);
+public sealed record GetDeviceLuminaireDto(
+    Guid LuminaireId,
+    string Name,
+    decimal NominalPowerWatts,
+    int Slot,
+    int GpioNumber);

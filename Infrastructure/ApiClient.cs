@@ -135,6 +135,15 @@ public sealed class ApiClient(HttpClient httpClient) : IApiClient
                     return error.Title;
                 }
 
+                var validationMessage = error?.Errors?
+                    .SelectMany(entry => entry.Value)
+                    .FirstOrDefault(message => !string.IsNullOrWhiteSpace(message));
+
+                if (!string.IsNullOrWhiteSpace(validationMessage))
+                {
+                    return validationMessage;
+                }
+
                 if (!string.IsNullOrWhiteSpace(error?.Message))
                 {
                     return error.Message;
@@ -157,7 +166,11 @@ public sealed class ApiClient(HttpClient httpClient) : IApiClient
         };
     }
 
-    private sealed record ApiErrorDto(string? Title, string? Detail, string? Message);
+    private sealed record ApiErrorDto(
+        string? Title,
+        string? Detail,
+        string? Message,
+        IReadOnlyDictionary<string, IReadOnlyCollection<string>>? Errors);
 }
 
 public sealed record ApiResponse<T>(

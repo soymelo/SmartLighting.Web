@@ -45,7 +45,11 @@
                 </RadzenText>
             </div>
             <div class="col-12 col-md-auto">
-                <RadzenButton Text="Atualizar" Icon="refresh" ButtonStyle="ButtonStyle.Light" Click="@LoadData" />
+                <div class="d-flex flex-wrap gap-2">
+                    <RadzenButton Text="Cadastrar dispositivo" Icon="add" ButtonStyle="ButtonStyle.Primary"
+                                  Click="@CreateDevice" />
+                    <RadzenButton Text="Atualizar" Icon="refresh" ButtonStyle="ButtonStyle.Light" Click="@LoadData" />
+                </div>
             </div>
         </div>
 

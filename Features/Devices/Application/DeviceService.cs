@@ -22,14 +22,48 @@ public class DeviceService(IApiClient apiClient) : ServiceBase
                     zone.Name,
                     zone.DisplayOrder,
                     zone.Sensors
-                        .Select(sensor => new DeviceSensorVM(sensor.SensorId, sensor.Name))
+                        .Select(sensor => new DeviceSensorVM(
+                            sensor.SensorId,
+                            sensor.Name,
+                            sensor.Slot,
+                            sensor.GpioNumber))
                         .ToArray(),
                     zone.Luminaires
                         .Select(luminaire => new DeviceLuminaireVM(
                             luminaire.LuminaireId,
                             luminaire.Name,
-                            luminaire.NominalPowerWatts))
+                            luminaire.NominalPowerWatts,
+                            luminaire.Slot,
+                            luminaire.GpioNumber))
                         .ToArray()))
                 .ToArray()));
+    }
+
+    public async Task<ServiceResult<DeviceSetupVM>> GetDeviceSetupAsync(Guid projectId)
+    {
+        var response = await apiClient.GetAsync<GetDeviceSetupDto>($"/projects/{projectId}/dashboard");
+
+        return FromApiResponse(response, project => new DeviceSetupVM(
+            project.ProjectId,
+            project.Name,
+            project.Zones
+                .OrderBy(zone => zone.DisplayOrder)
+                .ThenBy(zone => zone.ZoneId)
+                .Select(zone => new DeviceSetupZoneVM(
+                    zone.ZoneId,
+                    zone.Name,
+                    zone.DisplayOrder))
+                .ToArray()));
+    }
+
+    public async Task<ServiceResult<CreateDeviceResponseDto>> CreateDeviceAsync(
+        Guid projectId,
+        CreateDeviceDto device)
+    {
+        var response = await apiClient.PostAsync<CreateDeviceDto, CreateDeviceResponseDto>(
+            $"/projects/{projectId}/devices",
+            device);
+
+        return FromApiResponse(response);
     }
 }

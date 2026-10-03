@@ -225,13 +225,24 @@
 }
 
 .component-meta {
-    margin-left: auto;
     padding: 0.2rem 0.45rem;
     border-radius: 6px;
     color: var(--rz-text-secondary-color);
     background: rgba(255, 255, 255, 0.055);
     font-size: 0.75rem;
     white-space: nowrap;
+}
+
+.component-item > .component-meta,
+.component-meta-group {
+    margin-left: auto;
+}
+
+.component-meta-group {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: 0.4rem;
 }
 
 .component-empty {

@@ -11,6 +11,8 @@ public partial class Index
     [Inject] private DeviceService DeviceService { get; set; } = default!;
 
     [Parameter] public Guid DeviceId { get; set; }
+    [SupplyParameterFromQuery(Name = "created")]
+    public bool Created { get; set; }
 
     private bool isLoading = true;
     private bool isNotFound;

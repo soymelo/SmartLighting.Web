@@ -67,4 +67,9 @@ public partial class Index
     {
         Nav.NavigateTo($"/devices/{deviceId}");
     }
+
+    private void CreateDevice()
+    {
+        Nav.NavigateTo($"/projects/{ProjectId}/devices/new");
+    }
 }

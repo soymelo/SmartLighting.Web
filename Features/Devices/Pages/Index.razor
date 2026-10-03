@@ -36,6 +36,13 @@
     }
     else if (device is not null)
     {
+        @if (Created)
+        {
+            <RadzenAlert AlertStyle="AlertStyle.Success" class="mb-4">
+                Dispositivo cadastrado com sucesso. Use o ID abaixo para provisionar o ESP32.
+            </RadzenAlert>
+        }
+
         <section class="device-hero mb-4">
             <div class="row align-items-center g-4">
                 <div class="col-12 col-lg">
@@ -167,6 +174,7 @@
                                                 <div class="component-item">
                                                     <RadzenIcon Icon="sensors" />
                                                     <span>@sensor.Name</span>
+                                                    <span class="component-meta">Slot @sensor.Slot · GPIO @sensor.GpioNumber</span>
                                                 </div>
                                             }
                                         </div>
@@ -196,7 +204,10 @@
                                                 <div class="component-item">
                                                     <RadzenIcon Icon="lightbulb" />
                                                     <span>@luminaire.Name</span>
-                                                    <span class="component-meta">@luminaire.NominalPowerWatts W</span>
+                                                    <div class="component-meta-group">
+                                                        <span class="component-meta">Slot @luminaire.Slot · GPIO @luminaire.GpioNumber</span>
+                                                        <span class="component-meta">@luminaire.NominalPowerWatts W</span>
+                                                    </div>
                                                 </div>
                                             }
                                         </div>

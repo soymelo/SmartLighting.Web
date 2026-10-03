@@ -15,6 +15,15 @@ public sealed record DeviceZoneVM(
     IReadOnlyCollection<DeviceSensorVM> Sensors,
     IReadOnlyCollection<DeviceLuminaireVM> Luminaires);
 
-public sealed record DeviceSensorVM(Guid SensorId, string Name);
+public sealed record DeviceSensorVM(
+    Guid SensorId,
+    string Name,
+    int Slot,
+    int GpioNumber);
 
-public sealed record DeviceLuminaireVM(Guid LuminaireId, string Name, decimal NominalPowerWatts);
+public sealed record DeviceLuminaireVM(
+    Guid LuminaireId,
+    string Name,
+    decimal NominalPowerWatts,
+    int Slot,
+    int GpioNumber);

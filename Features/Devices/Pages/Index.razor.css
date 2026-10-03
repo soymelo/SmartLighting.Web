@@ -1,0 +1,280 @@
+.device-details-page {
+    --device-border: rgba(255, 255, 255, 0.09);
+    --device-surface: var(--rz-base-background-color, #232731);
+    --device-muted-surface: rgba(255, 255, 255, 0.035);
+    --device-blue: #92b2fa;
+    --device-green: #67dcb0;
+    --device-yellow: #f3bf6b;
+}
+
+.device-hero,
+.device-summary-card,
+.zone-card {
+    border: 1px solid var(--device-border);
+    background: linear-gradient(145deg, rgba(255, 255, 255, 0.045), rgba(255, 255, 255, 0.01)),
+                var(--device-surface);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
+}
+
+.device-hero {
+    padding: clamp(1.25rem, 3vw, 2rem);
+    border-radius: 22px;
+}
+
+.device-hero-icon,
+.summary-icon,
+.zone-icon,
+.component-group-icon {
+    display: flex;
+    flex: 0 0 auto;
+    align-items: center;
+    justify-content: center;
+}
+
+.device-hero-icon {
+    width: 64px;
+    height: 64px;
+    border-radius: 18px;
+    color: var(--device-blue);
+    background: rgba(146, 178, 250, 0.13);
+}
+
+.device-hero-icon ::deep .rz-icon {
+    font-size: 2rem;
+}
+
+.device-eyebrow {
+    color: var(--device-blue);
+    letter-spacing: 0.09em;
+}
+
+.device-title {
+    overflow-wrap: anywhere;
+}
+
+.device-project-reference {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    color: var(--rz-text-secondary-color);
+}
+
+.device-project-reference ::deep .rz-icon {
+    color: var(--device-green);
+    font-size: 1.05rem;
+}
+
+.device-identifier {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--device-border);
+    color: var(--rz-text-secondary-color);
+    font-size: 0.8rem;
+}
+
+.device-identifier code {
+    padding: 0.25rem 0.5rem;
+    border-radius: 6px;
+    color: inherit;
+    background: rgba(255, 255, 255, 0.045);
+    overflow-wrap: anywhere;
+}
+
+.device-summary-card {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    min-height: 138px;
+    padding: 1.25rem;
+    border-radius: 18px;
+}
+
+.summary-icon {
+    width: 46px;
+    height: 46px;
+    border-radius: 13px;
+}
+
+.summary-icon ::deep .rz-icon {
+    font-size: 1.45rem;
+}
+
+.summary-project {
+    color: var(--device-blue);
+    background: rgba(146, 178, 250, 0.13);
+}
+
+.summary-contact {
+    color: var(--device-green);
+    background: rgba(103, 220, 176, 0.13);
+}
+
+.summary-components {
+    color: var(--device-yellow);
+    background: rgba(243, 191, 107, 0.13);
+}
+
+.summary-value {
+    font-size: clamp(1rem, 1.2vw, 1.25rem);
+    line-height: 1.35;
+    overflow-wrap: anywhere;
+}
+
+.section-heading {
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+}
+
+.zone-card {
+    overflow: hidden;
+    border-radius: 18px;
+}
+
+.zone-header {
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+    padding: 1.1rem 1.25rem;
+    border-bottom: 1px solid var(--device-border);
+    background: rgba(255, 255, 255, 0.018);
+}
+
+.zone-icon {
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+    color: var(--device-blue);
+    background: rgba(146, 178, 250, 0.11);
+}
+
+.zone-total {
+    display: flex;
+    flex-direction: column;
+    align-items: end;
+    margin-left: auto;
+    color: var(--rz-text-title-color);
+    font-size: 1.1rem;
+    font-weight: 650;
+    line-height: 1.1;
+}
+
+.zone-total span {
+    color: var(--rz-text-secondary-color);
+    font-size: 0.72rem;
+    font-weight: 400;
+}
+
+.zone-content {
+    padding: 1.25rem;
+}
+
+.component-group {
+    overflow: hidden;
+    border: 1px solid var(--device-border);
+    border-radius: 14px;
+    background: var(--device-muted-surface);
+}
+
+.component-group-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.9rem 1rem;
+    border-bottom: 1px solid var(--device-border);
+}
+
+.component-group-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+}
+
+.component-group-sensors .component-group-icon {
+    color: var(--device-green);
+    background: rgba(103, 220, 176, 0.12);
+}
+
+.component-group-luminaires .component-group-icon {
+    color: var(--device-yellow);
+    background: rgba(243, 191, 107, 0.12);
+}
+
+.component-list {
+    padding: 0.35rem 1rem;
+}
+
+.component-item {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    min-height: 44px;
+    padding: 0.6rem 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.055);
+}
+
+.component-item:last-child {
+    border-bottom: 0;
+}
+
+.component-item ::deep .rz-icon {
+    color: var(--rz-text-secondary-color);
+    font-size: 1rem;
+}
+
+.component-meta {
+    margin-left: auto;
+    padding: 0.2rem 0.45rem;
+    border-radius: 6px;
+    color: var(--rz-text-secondary-color);
+    background: rgba(255, 255, 255, 0.055);
+    font-size: 0.75rem;
+    white-space: nowrap;
+}
+
+.component-empty {
+    padding: 1rem;
+    color: var(--rz-text-secondary-color);
+    font-size: 0.85rem;
+}
+
+.min-width-0 {
+    min-width: 0;
+}
+
+@media (max-width: 991.98px) {
+    .device-actions ::deep .rz-button {
+        flex: 1 1 auto;
+    }
+}
+
+@media (max-width: 575.98px) {
+    .device-hero-icon {
+        width: 52px;
+        height: 52px;
+        border-radius: 15px;
+    }
+
+    .device-hero-icon ::deep .rz-icon {
+        font-size: 1.65rem;
+    }
+
+    .device-actions {
+        flex-direction: column;
+    }
+
+    .device-actions ::deep .rz-button {
+        width: 100%;
+    }
+
+    .device-identifier {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .zone-content {
+        padding: 1rem;
+    }
+}

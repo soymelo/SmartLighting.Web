@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Components;
+using System.Net;
+using Microsoft.AspNetCore.Components;
 using SmartLighting.Web.Features.Devices.Application;
 using SmartLighting.Web.Features.Devices.Contracts.ViewModels;
 
@@ -9,11 +10,14 @@ public partial class Index
     [Inject] private NavigationManager Nav { get; set; } = default!;
     [Inject] private DeviceService DeviceService { get; set; } = default!;
 
-    private bool isLoading = true;
-    private string? errorMessage;
-    private IReadOnlyCollection<DeviceVMList> devices = [];
+    [Parameter] public Guid DeviceId { get; set; }
 
-    protected override async Task OnInitializedAsync()
+    private bool isLoading = true;
+    private bool isNotFound;
+    private string? errorMessage;
+    private DeviceVM? device;
+
+    protected override async Task OnParametersSetAsync()
     {
         await LoadData();
     }
@@ -21,19 +25,29 @@ public partial class Index
     private async Task LoadData()
     {
         isLoading = true;
+        isNotFound = false;
         errorMessage = null;
+        device = null;
 
         try
         {
-            var result = await DeviceService.GetDevicesAsync();
+            var result = await DeviceService.GetDeviceByIdAsync(DeviceId);
 
             if (!result.Success)
             {
-                errorMessage = result.Message ?? "Não foi possível carregar os dispositivos.";
+                isNotFound = result.StatusCode == HttpStatusCode.NotFound;
+                errorMessage = isNotFound
+                    ? null
+                    : result.Message ?? "Não foi possível carregar o dispositivo.";
                 return;
             }
 
-            devices = result.Data ?? [];
+            device = result.Data;
+
+            if (device is null)
+            {
+                errorMessage = "A API não retornou os dados do dispositivo.";
+            }
         }
         finally
         {
@@ -41,9 +55,16 @@ public partial class Index
         }
     }
 
-    private void OpenDeviceDashboard(Guid deviceId)
+    private void NavigateToProjectDashboard()
     {
-        Nav.NavigateTo($"/devices/{deviceId}");
+        if (device is not null)
+        {
+            Nav.NavigateTo($"/projects/{device.ProjectId}/dashboard");
+        }
     }
 
+    private void NavigateToProjects()
+    {
+        Nav.NavigateTo("/projects");
+    }
 }

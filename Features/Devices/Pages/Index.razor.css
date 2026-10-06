@@ -101,11 +101,6 @@
     font-size: 1.45rem;
 }
 
-.summary-project {
-    color: var(--device-blue);
-    background: rgba(146, 178, 250, 0.13);
-}
-
 .summary-contact {
     color: var(--device-green);
     background: rgba(103, 220, 176, 0.13);

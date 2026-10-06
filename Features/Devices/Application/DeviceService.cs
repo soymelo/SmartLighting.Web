@@ -66,4 +66,14 @@ public class DeviceService(IApiClient apiClient) : ServiceBase
 
         return FromApiResponse(response);
     }
+
+    public async Task<ServiceResult<UpdateDeviceResponseDto>> UpdateDeviceAsync(
+        Guid deviceId,
+        UpdateDeviceDto device)
+    {
+        var response = await apiClient.PutAsync<UpdateDeviceDto, UpdateDeviceResponseDto>(
+            $"/devices/{deviceId}", device);
+
+        return FromApiResponse(response);
+    }
 }

@@ -12,7 +12,7 @@
                     <RadzenBreadCrumbItem Path="/projects" Text="Projetos" />
                     @if (device is not null)
                     {
-                        <RadzenBreadCrumbItem Path="@($"/projects/{device.ProjectId}/dashboard")" Text="@device.ProjectName" />
+                        <RadzenBreadCrumbItem Path="@($"/projects/{device.ProjectId}/dashboard")" Text="Dashboard do projeto" />
                     }
                     <RadzenBreadCrumbItem Text="Dispositivo" />
                 </ChildContent>
@@ -42,6 +42,12 @@
                 Dispositivo cadastrado com sucesso. Use o ID abaixo para provisionar o ESP32.
             </RadzenAlert>
         }
+        else if (Updated)
+        {
+            <RadzenAlert AlertStyle="AlertStyle.Success" class="mb-4">
+                Dispositivo atualizado com sucesso.
+            </RadzenAlert>
+        }
 
         <section class="device-hero mb-4">
             <div class="row align-items-center g-4">
@@ -64,8 +70,10 @@
                 </div>
                 <div class="col-12 col-lg-auto">
                     <div class="device-actions d-flex flex-wrap gap-2">
-                        <RadzenButton Text="Dashboard do projeto" Icon="dashboard" ButtonStyle="ButtonStyle.Primary"
-                                      Click="@NavigateToProjectDashboard" />
+                        <RadzenButton Text="Voltar" Icon="arrow_back" ButtonStyle="ButtonStyle.Light"
+                                      Click="@NavigateBack" />
+                        <RadzenButton Text="Editar dispositivo" Icon="edit" ButtonStyle="ButtonStyle.Primary"
+                                      Click="@NavigateToEdit" />
                         <RadzenButton Text="Atualizar" Icon="refresh" ButtonStyle="ButtonStyle.Light"
                                       Click="@LoadData" Disabled="@isLoading" />
                     </div>
@@ -78,16 +86,7 @@
         </section>
 
         <div class="row g-3 g-xl-4 mb-5">
-            <div class="col-12 col-md-4">
-                <div class="device-summary-card h-100">
-                    <div class="summary-icon summary-project"><RadzenIcon Icon="location_city" /></div>
-                    <div class="min-width-0">
-                        <RadzenText TextStyle="TextStyle.Body2" class="rz-text-secondary mb-1">Projeto</RadzenText>
-                        <RadzenText TextStyle="TextStyle.H5" class="summary-value mb-0">@device.ProjectName</RadzenText>
-                    </div>
-                </div>
-            </div>
-            <div class="col-12 col-md-4">
+            <div class="col-12 col-md-6">
                 <div class="device-summary-card h-100">
                     <div class="summary-icon summary-contact"><RadzenIcon Icon="schedule" /></div>
                     <div class="min-width-0">
@@ -99,12 +98,12 @@
                         </RadzenText>
                         @if (device.LastTelemetryAtUtc is not null)
                         {
-                            <RadzenText TextStyle="TextStyle.Caption" class="rz-text-secondary mb-0">Horário de Brasília</RadzenText>
+                            <RadzenText TextStyle="TextStyle.Caption" class="rz-text-secondary mb-0">Horário</RadzenText>
                         }
                     </div>
                 </div>
             </div>
-            <div class="col-12 col-md-4">
+            <div class="col-12 col-md-6">
                 <div class="device-summary-card h-100">
                     <div class="summary-icon summary-components"><RadzenIcon Icon="account_tree" /></div>
                     <div class="min-width-0">
@@ -156,10 +155,7 @@
                                         <div class="component-group-header">
                                             <div class="component-group-icon"><RadzenIcon Icon="sensors" /></div>
                                             <div>
-                                                <RadzenText TextStyle="TextStyle.Subtitle2" class="mb-0">Sensores</RadzenText>
-                                                <RadzenText TextStyle="TextStyle.Caption" class="rz-text-secondary mb-0">
-                                                    @zone.Sensors.Count @(zone.Sensors.Count == 1 ? "vinculado" : "vinculados")
-                                                </RadzenText>
+                                                <RadzenText TextStyle="TextStyle.Subtitle2" class="mb-0">Sensores (@zone.Sensors.Count)</RadzenText>
                                             </div>
                                         </div>
                                     @if (zone.Sensors.Count == 0)
@@ -186,10 +182,7 @@
                                         <div class="component-group-header">
                                             <div class="component-group-icon"><RadzenIcon Icon="lightbulb" /></div>
                                             <div>
-                                                <RadzenText TextStyle="TextStyle.Subtitle2" class="mb-0">Luminárias</RadzenText>
-                                                <RadzenText TextStyle="TextStyle.Caption" class="rz-text-secondary mb-0">
-                                                    @zone.Luminaires.Count @(zone.Luminaires.Count == 1 ? "vinculada" : "vinculadas")
-                                                </RadzenText>
+                                                <RadzenText TextStyle="TextStyle.Subtitle2" class="mb-0">Luminárias (@zone.Luminaires.Count)</RadzenText>
                                             </div>
                                         </div>
                                     @if (zone.Luminaires.Count == 0)

@@ -1,0 +1,49 @@
+@page "/devices/{DeviceId:guid}/edit"
+@using SmartLighting.Web.Features.Devices.Components
+@using SmartLighting.Web.Features.Devices.Contracts.ViewModels
+
+<PageTitle>Editar dispositivo</PageTitle>
+
+<div class="device-edit-page container-fluid py-3 py-md-4">
+    <div class="row mb-4">
+        <div class="col-12">
+            <RadzenBreadCrumb>
+                <ChildContent>
+                    <RadzenBreadCrumbItem Path="/" Text="Home" />
+                    <RadzenBreadCrumbItem Path="/projects" Text="Projetos" />
+                    @if (device is not null)
+                    {
+                        <RadzenBreadCrumbItem Path="@($"/projects/{device.ProjectId}/dashboard")" Text="Dashboard do projeto" />
+                    }
+                    <RadzenBreadCrumbItem Path="@($"/devices/{DeviceId}")" Text="Dispositivo" />
+                    <RadzenBreadCrumbItem Text="Editar dispositivo" />
+                </ChildContent>
+            </RadzenBreadCrumb>
+        </div>
+    </div>
+
+    @if (isLoading)
+    {
+        <RadzenProgressBar Mode="ProgressBarMode.Indeterminate" ShowValue="false" />
+    }
+    else if (isNotFound)
+    {
+        <RadzenAlert AlertStyle="AlertStyle.Warning">O dispositivo solicitado não foi encontrado.</RadzenAlert>
+        <RadzenButton Text="Voltar para projetos" Icon="arrow_back" ButtonStyle="ButtonStyle.Light"
+                      Click="@NavigateToProjects" />
+    }
+    else if (loadErrorMessage is not null)
+    {
+        <RadzenAlert AlertStyle="AlertStyle.Danger">@loadErrorMessage</RadzenAlert>
+        <RadzenButton Text="Voltar" Icon="arrow_back" ButtonStyle="ButtonStyle.Light"
+                      Click="@NavigateToDevice" />
+    }
+    else if (deviceSetup is not null)
+    {
+        <DeviceConfigurationForm DeviceSetup="@deviceSetup" Form="@form"
+                                 ValidationErrors="@validationErrors" SubmitErrorMessage="@submitErrorMessage"
+                                 IsSubmitting="@isSubmitting" Title="Editar ESP32"
+                                 SubmitButtonText="Salvar alterações" FormName="edit-device"
+                                 OnSubmit="@HandleSubmit" OnCancel="@NavigateToDevice" />
+    }
+</div>

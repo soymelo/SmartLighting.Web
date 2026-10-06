@@ -23,10 +23,6 @@ public partial class CreateDevice
     private string? loadErrorMessage;
     private string? submitErrorMessage;
 
-    private int enabledSensorCount => form.Sensors.Count(sensor => sensor.Enabled);
-    private int enabledLuminaireCount => form.Luminaires.Count(luminaire => luminaire.Enabled);
-    private int enabledComponentCount => enabledSensorCount + enabledLuminaireCount;
-
     protected override async Task OnParametersSetAsync()
     {
         await LoadProjectAsync();
@@ -67,8 +63,16 @@ public partial class CreateDevice
 
     private async Task HandleSubmit(EditContext _)
     {
-        if (isSubmitting || deviceSetup is null || !ValidateForm())
+        if (isSubmitting || deviceSetup is null)
         {
+            return;
+        }
+
+        submitErrorMessage = null;
+
+        if (!DeviceFormValidator.Validate(form, validationErrors))
+        {
+            submitErrorMessage = "Revise os campos destacados antes de cadastrar o dispositivo.";
             return;
         }
 
@@ -117,71 +121,6 @@ public partial class CreateDevice
         }
     }
 
-    private bool ValidateForm()
-    {
-        validationErrors.Clear();
-        submitErrorMessage = null;
-
-        if (string.IsNullOrWhiteSpace(form.Name))
-        {
-            validationErrors["name"] = "Informe o nome do dispositivo.";
-        }
-        else if (form.Name.Trim().Length > 50)
-        {
-            validationErrors["name"] = "O nome deve ter no máximo 50 caracteres.";
-        }
-
-        foreach (var sensor in form.Sensors.Where(sensor => sensor.Enabled))
-        {
-            ValidateComponentName(sensor.Name, $"sensor-{sensor.Slot}-name");
-
-            if (sensor.ZoneId is null)
-            {
-                validationErrors[$"sensor-{sensor.Slot}-zone"] = "Selecione a zona do sensor.";
-            }
-        }
-
-        foreach (var luminaire in form.Luminaires.Where(luminaire => luminaire.Enabled))
-        {
-            ValidateComponentName(luminaire.Name, $"luminaire-{luminaire.Slot}-name");
-
-            if (luminaire.ZoneId is null)
-            {
-                validationErrors[$"luminaire-{luminaire.Slot}-zone"] = "Selecione a zona da luminária.";
-            }
-
-            if (luminaire.NominalPowerWatts is null or <= 0)
-            {
-                validationErrors[$"luminaire-{luminaire.Slot}-power"] = "Informe uma potência maior que zero.";
-            }
-            else if (luminaire.NominalPowerWatts > 99999999.99m ||
-                     decimal.Round(luminaire.NominalPowerWatts.Value, 2) != luminaire.NominalPowerWatts.Value)
-            {
-                validationErrors[$"luminaire-{luminaire.Slot}-power"] = "Use até 8 dígitos inteiros e 2 casas decimais.";
-            }
-        }
-
-        if (validationErrors.Count > 0)
-        {
-            submitErrorMessage = "Revise os campos destacados antes de cadastrar o dispositivo.";
-        }
-
-        return validationErrors.Count == 0;
-    }
-
-    private void ValidateComponentName(string name, string key)
-    {
-        if (string.IsNullOrWhiteSpace(name))
-        {
-            validationErrors[key] = "Informe o nome do componente.";
-        }
-        else if (name.Trim().Length > 50)
-        {
-            validationErrors[key] = "O nome deve ter no máximo 50 caracteres.";
-        }
-    }
-
-    private string? GetError(string key) => validationErrors.GetValueOrDefault(key);
 
     private void NavigateToDashboard() =>
         Nav.NavigateTo($"/projects/{ProjectId}/dashboard");

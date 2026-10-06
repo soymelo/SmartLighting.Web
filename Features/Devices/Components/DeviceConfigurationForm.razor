@@ -1,0 +1,235 @@
+@using Microsoft.AspNetCore.Components.Forms
+@using SmartLighting.Web.Features.Devices.Contracts.ViewModels
+
+        <section class="create-hero mb-4">
+            <div class="d-flex flex-column flex-lg-row align-items-lg-center justify-content-between gap-3">
+                <div class="d-flex align-items-start gap-3">
+                    <div class="create-hero-icon"><RadzenIcon Icon="developer_board" /></div>
+                    <div>
+                        <RadzenText TextStyle="TextStyle.H3" class="mb-2">@Title</RadzenText>
+                        <RadzenText TextStyle="TextStyle.Body2" class="rz-text-secondary mb-0">
+                            Configure os componentes físicos que serão controlados no projeto @DeviceSetup.ProjectName.
+                        </RadzenText>
+                    </div>
+                </div>
+                <div class="create-counts">
+                    <span><strong>@enabledSensorCount</strong> de 3 sensores</span>
+                    <span><strong>@enabledLuminaireCount</strong> de 6 luminárias</span>
+                </div>
+            </div>
+        </section>
+
+        @if (DeviceSetup.Zones.Count == 0)
+        {
+            <RadzenAlert AlertStyle="AlertStyle.Info" class="mb-4">
+                Este projeto ainda não possui zonas. Configure as zonas antes de adicionar componentes.
+            </RadzenAlert>
+        }
+
+        @if (SubmitErrorMessage is not null)
+        {
+            <RadzenAlert AlertStyle="AlertStyle.Danger" class="mb-4">@SubmitErrorMessage</RadzenAlert>
+        }
+
+        <EditForm Model="@Form" OnSubmit="@OnSubmit" FormName="@FormName">
+            <section class="form-section mb-4">
+                <header class="form-section-header">
+                    <div class="section-icon section-icon-device"><RadzenIcon Icon="badge" /></div>
+                    <div>
+                        <RadzenText TextStyle="TextStyle.H5" class="mb-1">Identificação</RadzenText>
+                    </div>
+                </header>
+                <div class="form-section-body">
+                    <div class="field-group device-name-field">
+                        <label for="device-name">Nome do dispositivo</label>
+                        <RadzenTextBox id="device-name" @bind-Value="Form.Name" MaxLength="50"
+                                       Placeholder="Ex.: ESP32 corredor" Style="width: 100%;" />
+                        @if (GetError("name") is { } nameError)
+                        {
+                            <span class="field-error">@nameError</span>
+                        }
+                    </div>
+                </div>
+            </section>
+
+            <section class="form-section mb-4">
+                <header class="form-section-header">
+                    <div class="section-icon section-icon-sensor"><RadzenIcon Icon="sensors" /></div>
+                    <div>
+                        <RadzenText TextStyle="TextStyle.H5" class="mb-1">Sensores</RadzenText>
+                        <RadzenText TextStyle="TextStyle.Body2" class="rz-text-secondary mb-0">
+                            Ative somente os sensores conectados fisicamente ao ESP32.
+                        </RadzenText>
+                    </div>
+                </header>
+                <div class="form-section-body">
+                    <div class="row g-3">
+                        @foreach (var sensor in Form.Sensors)
+                        {
+                            <div class="col-12 col-xl-4">
+                                <article class="slot-card sensor-slot @(sensor.Enabled ? "slot-enabled" : null)">
+                                    <header class="slot-card-header">
+                                        <div>
+                                            <span class="slot-type">Sensor @sensor.Slot</span>
+                                            <div class="slot-pinout">
+                                                <span>GPIO @sensor.GpioNumber</span>
+                                            </div>
+                                        </div>
+                                        @if (sensor.IsPersisted)
+                                        {
+                                            <span class="slot-locked">Configurado</span>
+                                        }
+                                        else
+                                        {
+                                            <button type="button" class="slot-toggle-action" aria-pressed="@sensor.Enabled"
+                                                    @onclick="@(() => sensor.Enabled = !sensor.Enabled)">
+                                                @(sensor.Enabled ? "Em uso" : "Utilizar")
+                                            </button>
+                                        }
+                                    </header>
+
+                                    @if (sensor.Enabled)
+                                    {
+                                        <div class="slot-fields">
+                                            <div class="field-group">
+                                                <label>Nome</label>
+                                                <RadzenTextBox @bind-Value="sensor.Name" MaxLength="50"
+                                                               Placeholder="Nome do sensor" Style="width: 100%;" />
+                                                @if (GetError($"sensor-{sensor.Slot}-name") is { } sensorNameError)
+                                                {
+                                                    <span class="field-error">@sensorNameError</span>
+                                                }
+                                            </div>
+                                            <div class="field-group">
+                                                <label>Zona</label>
+                                                <RadzenDropDown TValue="Guid?" Data="@DeviceSetup.Zones"
+                                                                TextProperty="Name" ValueProperty="ZoneId"
+                                                                @bind-Value="sensor.ZoneId" Placeholder="Selecione a zona"
+                                                                Style="width: 100%;" />
+                                                @if (GetError($"sensor-{sensor.Slot}-zone") is { } sensorZoneError)
+                                                {
+                                                    <span class="field-error">@sensorZoneError</span>
+                                                }
+                                            </div>
+                                        </div>
+                                    }
+                                </article>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </section>
+
+            <section class="form-section mb-4">
+                <header class="form-section-header">
+                    <div class="section-icon section-icon-luminaire"><RadzenIcon Icon="lightbulb" /></div>
+                    <div>
+                        <RadzenText TextStyle="TextStyle.H5" class="mb-1">Luminárias</RadzenText>
+                    </div>
+                </header>
+                <div class="form-section-body">
+                    <div class="power-note mb-3">
+                        <RadzenIcon Icon="info" />
+                        <span>A potência será usada futuramente para estimar consumo e porcentagem de economia.</span>
+                    </div>
+                    <div class="row g-3">
+                        @foreach (var luminaire in Form.Luminaires)
+                        {
+                            <div class="col-12 col-md-6 col-xl-4">
+                                <article class="slot-card luminaire-slot @(luminaire.Enabled ? "slot-enabled" : null)">
+                                    <header class="slot-card-header">
+                                        <div>
+                                            <span class="slot-type">LED @luminaire.Slot</span>
+                                            <div class="slot-pinout">
+                                                <span>GPIO @luminaire.GpioNumber</span>
+                                            </div>
+                                        </div>
+                                        @if (luminaire.IsPersisted)
+                                        {
+                                            <span class="slot-locked">Configurado</span>
+                                        }
+                                        else
+                                        {
+                                            <button type="button" class="slot-toggle-action" aria-pressed="@luminaire.Enabled"
+                                                    @onclick="@(() => luminaire.Enabled = !luminaire.Enabled)">
+                                                @(luminaire.Enabled ? "Em uso" : "Utilizar")
+                                            </button>
+                                        }
+                                    </header>
+
+                                    @if (luminaire.Enabled)
+                                    {
+                                        <div class="slot-fields">
+                                            <div class="field-group">
+                                                <label>Nome</label>
+                                                <RadzenTextBox @bind-Value="luminaire.Name" MaxLength="50"
+                                                               Placeholder="Nome da luminária" Style="width: 100%;" />
+                                                @if (GetError($"luminaire-{luminaire.Slot}-name") is { } luminaireNameError)
+                                                {
+                                                    <span class="field-error">@luminaireNameError</span>
+                                                }
+                                            </div>
+                                            <div class="field-group">
+                                                <label>Zona</label>
+                                                <RadzenDropDown TValue="Guid?" Data="@DeviceSetup.Zones"
+                                                                TextProperty="Name" ValueProperty="ZoneId"
+                                                                @bind-Value="luminaire.ZoneId" Placeholder="Selecione a zona"
+                                                                Style="width: 100%;" />
+                                                @if (GetError($"luminaire-{luminaire.Slot}-zone") is { } luminaireZoneError)
+                                                {
+                                                    <span class="field-error">@luminaireZoneError</span>
+                                                }
+                                            </div>
+                                            <div class="field-group">
+                                                <label>Potência nominal (W)</label>
+                                                <RadzenNumeric TValue="decimal?" @bind-Value="luminaire.NominalPowerWatts"
+                                                               Min="@(0.01m)" Max="@(99999999.99m)" Step="0.01"
+                                                               Placeholder="Ex.: 0,10" Style="width: 100%;" />
+                                                @if (GetError($"luminaire-{luminaire.Slot}-power") is { } luminairePowerError)
+                                                {
+                                                    <span class="field-error">@luminairePowerError</span>
+                                                }
+                                            </div>
+                                        </div>
+                                    }
+                                </article>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </section>
+
+            <div class="form-actions">
+                <div>
+                    <RadzenText TextStyle="TextStyle.Subtitle2" class="mb-1">Resumo da configuração</RadzenText>
+                    <RadzenText TextStyle="TextStyle.Caption" class="rz-text-secondary mb-0">
+                        @enabledComponentCount componentes ativos · @(9 - enabledComponentCount) slots livres
+                    </RadzenText>
+                </div>
+                <div class="d-flex flex-wrap gap-2">
+                    <RadzenButton Text="Cancelar" Icon="close" ButtonStyle="ButtonStyle.Light"
+                                  ButtonType="ButtonType.Button" Click="@OnCancel" Disabled="@IsSubmitting" />
+                    <RadzenButton Text="@SubmitButtonText" Icon="save" ButtonStyle="ButtonStyle.Primary"
+                                  ButtonType="ButtonType.Submit" IsBusy="@IsSubmitting" Disabled="@IsSubmitting" />
+                </div>
+            </div>
+        </EditForm>
+
+@code {
+    [Parameter, EditorRequired] public required DeviceSetupVM DeviceSetup { get; set; }
+    [Parameter, EditorRequired] public required CreateDeviceFormVM Form { get; set; }
+    [Parameter, EditorRequired] public required IReadOnlyDictionary<string, string> ValidationErrors { get; set; }
+    [Parameter] public string? SubmitErrorMessage { get; set; }
+    [Parameter] public bool IsSubmitting { get; set; }
+    [Parameter, EditorRequired] public required string Title { get; set; }
+    [Parameter, EditorRequired] public required string SubmitButtonText { get; set; }
+    [Parameter, EditorRequired] public required string FormName { get; set; }
+    [Parameter] public EventCallback<EditContext> OnSubmit { get; set; }
+    [Parameter] public EventCallback OnCancel { get; set; }
+
+    private int enabledSensorCount => Form.Sensors.Count(sensor => sensor.Enabled);
+    private int enabledLuminaireCount => Form.Luminaires.Count(luminaire => luminaire.Enabled);
+    private int enabledComponentCount => enabledSensorCount + enabledLuminaireCount;
+
+    private string? GetError(string key) => ValidationErrors.GetValueOrDefault(key);
+}

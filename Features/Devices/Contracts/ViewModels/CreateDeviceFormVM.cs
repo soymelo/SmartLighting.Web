@@ -27,6 +27,7 @@ public sealed class DeviceSensorSlotFormVM(int slot, int gpioNumber, string name
     public int Slot { get; } = slot;
     public int GpioNumber { get; } = gpioNumber;
     public bool Enabled { get; set; }
+    public bool IsPersisted { get; set; }
     public string Name { get; set; } = name;
     public Guid? ZoneId { get; set; }
 }
@@ -36,6 +37,7 @@ public sealed class DeviceLuminaireSlotFormVM(int slot, int gpioNumber, string n
     public int Slot { get; } = slot;
     public int GpioNumber { get; } = gpioNumber;
     public bool Enabled { get; set; }
+    public bool IsPersisted { get; set; }
     public string Name { get; set; } = name;
     public Guid? ZoneId { get; set; }
     public decimal? NominalPowerWatts { get; set; }

@@ -13,6 +13,8 @@ public partial class Index
     [Parameter] public Guid DeviceId { get; set; }
     [SupplyParameterFromQuery(Name = "created")]
     public bool Created { get; set; }
+    [SupplyParameterFromQuery(Name = "updated")]
+    public bool Updated { get; set; }
 
     private bool isLoading = true;
     private bool isNotFound;
@@ -57,7 +59,7 @@ public partial class Index
         }
     }
 
-    private void NavigateToProjectDashboard()
+    private void NavigateBack()
     {
         if (device is not null)
         {
@@ -69,4 +71,6 @@ public partial class Index
     {
         Nav.NavigateTo("/projects");
     }
+
+    private void NavigateToEdit() => Nav.NavigateTo($"/devices/{DeviceId}/edit");
 }

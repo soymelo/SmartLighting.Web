@@ -21,7 +21,7 @@ else
                     <Template Context="row">
                         @(row.UpdatedAtUtc is null
                             ? "Sem estado recebido"
-                            : $"{ProjectDashboardDateFormatter.Format(row.UpdatedAtUtc.Value)} (horário de Brasília)")
+                            : $"{ProjectDashboardDateFormatter.Format(row.UpdatedAtUtc.Value)} (horário)")
                     </Template>
                 </RadzenDataGridColumn>
             </Columns>

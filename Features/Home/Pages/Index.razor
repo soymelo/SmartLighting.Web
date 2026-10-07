@@ -1,0 +1,45 @@
+@page "/"
+
+<PageTitle>Início | Smart Lighting</PageTitle>
+
+<main class="home-page container-fluid py-3 py-md-4">
+    <section class="home-hero" @ref="heroElement" aria-labelledby="home-title">
+        <canvas class="home-light-canvas" @ref="lightCanvas" aria-hidden="true"></canvas>
+
+        <div class="home-hero-content">
+            <div class="home-icon" aria-hidden="true">
+                <RadzenIcon Icon="lightbulb" />
+            </div>
+
+            <RadzenText TextStyle="TextStyle.Overline" class="home-eyebrow mb-2">
+                Iluminação inteligente
+            </RadzenText>
+
+            <RadzenText TextStyle="TextStyle.H1" id="home-title" class="home-title mb-3">
+                Smart Lighting
+            </RadzenText>
+
+            <RadzenText TextStyle="TextStyle.Body1" class="home-lead mb-4">
+                Uma visão clara dos seus projetos de iluminação.
+            </RadzenText>
+
+            <RadzenButton Text="Explorar projetos" Icon="arrow_forward"
+                          ButtonStyle="ButtonStyle.Primary" Click="@OpenProjects" />
+        </div>
+    </section>
+
+    <section class="home-about" aria-labelledby="home-about-title">
+        <div class="home-about-icon" aria-hidden="true">
+            <RadzenIcon Icon="insights" />
+        </div>
+        <div>
+            <RadzenText TextStyle="TextStyle.H4" id="home-about-title" class="mb-2">
+                Sobre o projeto
+            </RadzenText>
+            <RadzenText TextStyle="TextStyle.Body1" class="home-about-text mb-0">
+                Acompanhe projetos de iluminação inteligente em um só lugar. Visualize
+                controladores, zonas, sensores, luminárias e os dados recebidos dos dispositivos.
+            </RadzenText>
+        </div>
+    </section>
+</main>

@@ -130,11 +130,6 @@ public sealed class ApiClient(HttpClient httpClient) : IApiClient
                     return error.Detail;
                 }
 
-                if (!string.IsNullOrWhiteSpace(error?.Title))
-                {
-                    return error.Title;
-                }
-
                 var validationMessage = error?.Errors?
                     .SelectMany(entry => entry.Value)
                     .FirstOrDefault(message => !string.IsNullOrWhiteSpace(message));
@@ -142,6 +137,11 @@ public sealed class ApiClient(HttpClient httpClient) : IApiClient
                 if (!string.IsNullOrWhiteSpace(validationMessage))
                 {
                     return validationMessage;
+                }
+
+                if (!string.IsNullOrWhiteSpace(error?.Title))
+                {
+                    return error.Title;
                 }
 
                 if (!string.IsNullOrWhiteSpace(error?.Message))

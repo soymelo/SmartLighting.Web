@@ -13,11 +13,6 @@
     --project-accent-soft: rgba(128, 170, 255, 0.13);
 }
 
-.project-accent-savings {
-    --project-accent: #c9a0f4;
-    --project-accent-soft: rgba(201, 160, 244, 0.13);
-}
-
 .project-summary-card ::deep .rz-card,
 .project-panel ::deep .rz-card {
     height: 100%;
@@ -58,6 +53,36 @@
     font-weight: 650;
     line-height: 1.3;
     overflow-wrap: anywhere;
+}
+
+.project-contact-status {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    font-size: 0.78rem;
+}
+
+.project-status-dot {
+    width: 0.55rem;
+    height: 0.55rem;
+    border-radius: 50%;
+}
+
+.project-contact-status.is-online {
+    color: #79ddb8;
+}
+
+.project-contact-status.is-online .project-status-dot {
+    background: #67dcb0;
+    box-shadow: 0 0 0 4px rgba(103, 220, 176, 0.13);
+}
+
+.project-contact-status.is-offline {
+    color: var(--rz-text-secondary-color);
+}
+
+.project-contact-status.is-offline .project-status-dot {
+    background: #aab1bc;
 }
 
 .min-width-0 {

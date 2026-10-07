@@ -7,6 +7,8 @@ namespace SmartLighting.Web.Features.ProjectDashboard.Pages;
 
 public partial class Index
 {
+    private static readonly TimeSpan OnlineThreshold = TimeSpan.FromMinutes(5);
+
     [Inject] private NavigationManager Nav { get; set; } = default!;
     [Inject] private ProjectDashboardService ProjectDashboardService { get; set; } = default!;
 
@@ -24,6 +26,10 @@ public partial class Index
         .Select(device => device.LastTelemetryAtUtc)
         .OrderByDescending(date => date)
         .FirstOrDefault();
+
+    private int onlineDeviceCount => projectDashboardVM?.Devices.Count(device =>
+        device.LastTelemetryAtUtc is not null &&
+        DateTime.UtcNow - device.LastTelemetryAtUtc.Value <= OnlineThreshold) ?? 0;
 
     protected override async Task OnParametersSetAsync()
     {

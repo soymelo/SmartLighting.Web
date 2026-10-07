@@ -14,7 +14,7 @@ else
                     <Template Context="row">
                         @(row.LastTelemetryAtUtc is null
                             ? "Nenhuma telemetria recebida"
-                            : $"{ProjectDashboardDateFormatter.Format(row.LastTelemetryAtUtc.Value)} (horário de Brasília)")
+                            : $"{ProjectDashboardDateFormatter.Format(row.LastTelemetryAtUtc.Value)} (horário)")
                     </Template>
                 </RadzenDataGridColumn>
                 <RadzenDataGridColumn TItem="ProjectDeviceVMList" Title="Detalhes" Width="100px">

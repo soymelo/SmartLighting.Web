@@ -7,14 +7,14 @@
 else
 {
     <div class="overflow-auto">
-        <RadzenDataGrid Data="@Events" TItem="ProjectSensorEventVMList" AllowPaging="false" AllowSorting="false" Style="min-width: 700px;">
+        <RadzenDataGrid Data="@Events" TItem="ProjectSensorEventVMList" AllowPaging="false" AllowSorting="false" Style="min-width: 560px;">
             <Columns>
-                <RadzenDataGridColumn TItem="ProjectSensorEventVMList" Property="SensorName" Title="Sensor" />
-                <RadzenDataGridColumn TItem="ProjectSensorEventVMList" Property="ZoneName" Title="Zona" />
-                <RadzenDataGridColumn TItem="ProjectSensorEventVMList" Property="DeviceName" Title="Controlador de origem" />
-                <RadzenDataGridColumn TItem="ProjectSensorEventVMList" Title="Data da detecção">
+                <RadzenDataGridColumn TItem="ProjectSensorEventVMList" Property="SensorName" Title="Sensor" Width="120px" />
+                <RadzenDataGridColumn TItem="ProjectSensorEventVMList" Property="ZoneName" Title="Zona" Width="100px" />
+                <RadzenDataGridColumn TItem="ProjectSensorEventVMList" Property="DeviceName" Title="Controlador" Width="145px" />
+                <RadzenDataGridColumn TItem="ProjectSensorEventVMList" Title="Data e hora" Width="165px">
                     <Template Context="row">
-                        @ProjectDashboardDateFormatter.Format(row.OccurredAtUtc) (horário de Brasília)
+                        @ProjectDashboardDateFormatter.Format(row.OccurredAtUtc)
                     </Template>
                 </RadzenDataGridColumn>
             </Columns>

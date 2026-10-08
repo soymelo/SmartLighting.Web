@@ -109,7 +109,7 @@
                     <div class="min-width-0">
                         <RadzenText TextStyle="TextStyle.Body2" class="rz-text-secondary mb-1">Componentes</RadzenText>
                         <RadzenText TextStyle="TextStyle.H5" class="summary-value mb-1">
-                            @(device.Zones.Sum(zone => zone.Sensors.Count) + device.Zones.Sum(zone => zone.Luminaires.Count)) vinculados
+                            @(device.Zones.Sum(zone => zone.Sensors.Count) + device.Zones.SelectMany(zone => zone.Luminaires).Select(luminaire => luminaire.LuminaireId).Distinct().Count()) vinculados
                         </RadzenText>
                         <RadzenText TextStyle="TextStyle.Caption" class="rz-text-secondary mb-0">
                             @device.Zones.Count @(device.Zones.Count == 1 ? "zona" : "zonas")

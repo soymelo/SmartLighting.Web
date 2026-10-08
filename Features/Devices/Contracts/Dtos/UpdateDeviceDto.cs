@@ -10,7 +10,7 @@ public sealed record UpdateDeviceSensorDto(int Slot, string Name, Guid ZoneId);
 public sealed record UpdateDeviceLuminaireDto(
     int Slot,
     string Name,
-    Guid ZoneId,
+    IReadOnlyCollection<Guid> ZoneIds,
     decimal NominalPowerWatts);
 
 public sealed record UpdateDeviceResponseDto(

@@ -95,7 +95,7 @@ public partial class CreateDevice
                     .Select(luminaire => new CreateDeviceLuminaireDto(
                         luminaire.Slot,
                         luminaire.Name.Trim(),
-                        luminaire.ZoneId!.Value,
+                        luminaire.ZoneIds.ToArray(),
                         luminaire.NominalPowerWatts!.Value))
                     .ToArray());
 

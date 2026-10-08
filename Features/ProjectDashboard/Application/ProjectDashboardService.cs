@@ -33,13 +33,19 @@ public class ProjectDashboardService(IApiClient apiClient) : ServiceBase
                         zone.Luminaires.Count))
                     .ToArray(),
                 dashboard.Zones
-                    .SelectMany(zone => zone.Luminaires.Select(luminaire => new ProjectLuminaireVMList(
-                        luminaire.LuminaireId,
-                        luminaire.Name,
-                        zone.Name,
-                        deviceNames.GetValueOrDefault(luminaire.DeviceId, "Controlador não identificado"),
-                        luminaire.BrightnessPercentage,
-                        luminaire.UpdatedAtUtc)))
+                    .SelectMany(zone => zone.Luminaires.Select(luminaire => (ZoneName: zone.Name, Luminaire: luminaire)))
+                    .GroupBy(item => item.Luminaire.LuminaireId)
+                    .Select(group =>
+                    {
+                        var luminaire = group.First().Luminaire;
+                        return new ProjectLuminaireVMList(
+                            group.Key,
+                            luminaire.Name,
+                            string.Join(", ", group.Select(item => item.ZoneName)),
+                            deviceNames.GetValueOrDefault(luminaire.DeviceId, "Controlador não identificado"),
+                            luminaire.BrightnessPercentage,
+                            luminaire.UpdatedAtUtc);
+                    })
                     .ToArray(),
                 dashboard.RecentSensorEvents
                     .Select(sensorEvent => new ProjectSensorEventVMList(

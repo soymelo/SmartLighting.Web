@@ -13,7 +13,7 @@ public sealed record CreateDeviceSensorDto(
 public sealed record CreateDeviceLuminaireDto(
     int Slot,
     string Name,
-    Guid ZoneId,
+    IReadOnlyCollection<Guid> ZoneIds,
     decimal NominalPowerWatts);
 
 public sealed record CreateDeviceResponseDto(

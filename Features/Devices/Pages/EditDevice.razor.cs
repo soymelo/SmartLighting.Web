@@ -90,7 +90,7 @@ public partial class EditDevice
                 slot.Enabled = true;
                 slot.IsPersisted = true;
                 slot.Name = luminaire.Name;
-                slot.ZoneId = zone.ZoneId;
+                slot.ZoneIds = slot.ZoneIds.Append(zone.ZoneId).ToArray();
                 slot.NominalPowerWatts = luminaire.NominalPowerWatts;
             }
         }
@@ -120,7 +120,7 @@ public partial class EditDevice
                         sensor.Slot, sensor.Name.Trim(), sensor.ZoneId!.Value)).ToArray(),
                 form.Luminaires.Where(luminaire => luminaire.Enabled)
                     .Select(luminaire => new UpdateDeviceLuminaireDto(
-                        luminaire.Slot, luminaire.Name.Trim(), luminaire.ZoneId!.Value,
+                        luminaire.Slot, luminaire.Name.Trim(), luminaire.ZoneIds.ToArray(),
                         luminaire.NominalPowerWatts!.Value)).ToArray());
 
             var result = await DeviceService.UpdateDeviceAsync(DeviceId, request);

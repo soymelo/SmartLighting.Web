@@ -39,6 +39,6 @@ public sealed class DeviceLuminaireSlotFormVM(int slot, int gpioNumber, string n
     public bool Enabled { get; set; }
     public bool IsPersisted { get; set; }
     public string Name { get; set; } = name;
-    public Guid? ZoneId { get; set; }
+    public IEnumerable<Guid> ZoneIds { get; set; } = [];
     public decimal? NominalPowerWatts { get; set; }
 }

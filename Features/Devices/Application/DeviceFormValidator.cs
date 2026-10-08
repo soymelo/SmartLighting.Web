@@ -31,9 +31,9 @@ public static class DeviceFormValidator
         {
             ValidateComponentName(validationErrors, luminaire.Name, $"luminaire-{luminaire.Slot}-name");
 
-            if (luminaire.ZoneId is null)
+            if (!luminaire.ZoneIds.Any())
             {
-                validationErrors[$"luminaire-{luminaire.Slot}-zone"] = "Selecione a zona da luminária.";
+                validationErrors[$"luminaire-{luminaire.Slot}-zone"] = "Selecione ao menos uma zona da luminária.";
             }
 
             if (luminaire.NominalPowerWatts is null or <= 0)

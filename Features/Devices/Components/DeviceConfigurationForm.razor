@@ -170,10 +170,10 @@
                                                 }
                                             </div>
                                             <div class="field-group">
-                                                <label>Zona</label>
-                                                <RadzenDropDown TValue="Guid?" Data="@DeviceSetup.Zones"
+                                                <label>Zonas</label>
+                                                <RadzenDropDown TValue="IEnumerable<Guid>" Data="@DeviceSetup.Zones" Multiple="true"
                                                                 TextProperty="Name" ValueProperty="ZoneId"
-                                                                @bind-Value="luminaire.ZoneId" Placeholder="Selecione a zona"
+                                                                @bind-Value="luminaire.ZoneIds" Placeholder="Selecione as zonas"
                                                                 Style="width: 100%;" />
                                                 @if (GetError($"luminaire-{luminaire.Slot}-zone") is { } luminaireZoneError)
                                                 {

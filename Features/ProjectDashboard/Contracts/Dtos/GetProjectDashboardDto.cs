@@ -5,7 +5,10 @@ public sealed record GetProjectDashboardDto(
     string Name,
     IReadOnlyCollection<GetProjectDashboardDeviceDto> Devices,
     IReadOnlyCollection<GetProjectDashboardZoneDto> Zones,
-    IReadOnlyCollection<GetProjectDashboardSensorEventDto> RecentSensorEvents);
+    IReadOnlyCollection<GetProjectDashboardSensorEventDto> RecentSensorEvents,
+    IReadOnlyCollection<GetProjectDashboardZoneActivityDto> ZoneActivity24h);
+
+public sealed record GetProjectDashboardZoneActivityDto(Guid ZoneId, int EventCount);
 
 public sealed record GetProjectDashboardDeviceDto(Guid DeviceId, string Name, DateTime? LastTelemetryAtUtc);
 

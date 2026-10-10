@@ -60,13 +60,13 @@
                                 <RadzenText TextStyle="TextStyle.Body2" class="rz-text-secondary mb-2">Último contato</RadzenText>
                                 <RadzenText TextStyle="TextStyle.H5" class="project-summary-value mb-1">
                                     @(lastTelemetryAtUtc is null
-                                        ? "Nenhuma telemetria recebida"
+                                        ? "Nenhum contato registrado"
                                         : ProjectDashboardDateFormatter.Format(lastTelemetryAtUtc.Value))
                                 </RadzenText>
                                 @if (lastTelemetryAtUtc is null)
                                 {
                                     <RadzenText TextStyle="TextStyle.Caption" class="rz-text-secondary mb-0">
-                                        Aguardando os controladores
+                                        Sem confirmação de contato dos controladores
                                     </RadzenText>
                                 }
                                 else
@@ -132,14 +132,76 @@
                             <div>
                                 <RadzenText TextStyle="TextStyle.H5" class="mb-1">Mapa de calor do projeto</RadzenText>
                                 <RadzenText TextStyle="TextStyle.Body2" class="rz-text-secondary mb-0">
-                                    Visualização espacial da atividade dos sensores.
+                                    @(IsMaqueteMap
+                                        ? "Posições dos sensores e LEDs na maquete e registros por zona nas últimas 24 horas."
+                                        : "Registros dos sensores por zona nas últimas 24 horas.")
                                 </RadzenText>
                             </div>
                         </div>
-                        <div class="project-map-placeholder d-flex flex-column align-items-center justify-content-center text-center">
-                            <RadzenIcon Icon="grid_on" class="project-placeholder-icon mb-3" />
-                            <RadzenText TextStyle="TextStyle.Body2" class="rz-text-secondary mb-0">Visualização em preparação</RadzenText>
-                        </div>
+                        @if (projectDashboardVM.Zones.Count == 0)
+                        {
+                            <p class="rz-text-secondary mb-0">Cadastre zonas para visualizar a atividade.</p>
+                        }
+                        else
+                        {
+                            <div class="@(IsMaqueteMap ? "project-map-layout" : "")">
+                                @if (IsMaqueteMap)
+                                {
+                                    <div class="project-map-main">
+                                        <div class="maquete-map" aria-label="Mapa da maquete com a posição dos seis sensores e dez LEDs">
+                                            <img src="/images/maquete-mapa.png" alt="Vista superior da maquete com campo de futebol, ruas e casas" />
+                                            @foreach (var marker in SensorMarkers)
+                                            {
+                                                var zone = GetMapZone(marker.Number);
+                                                if (zone is not null)
+                                                {
+                                                    var sensorName = zone.Sensors.Single().Name;
+                                                    <div class="maquete-marker maquete-sensor @GetZoneActivityClass(zone.ZoneId) @(marker.LabelBelow ? "label-below" : "label-above")"
+                                                         style="@($"left: {marker.X}%; top: {marker.Y}%;")"
+                                                         title="@($"{sensorName} · {zone.Name}: {FormatZoneEventCount(zone.ZoneId)} nas últimas 24 horas")"
+                                                         role="img"
+                                                         aria-label="@($"{sensorName}, {zone.Name}, {FormatZoneEventCount(zone.ZoneId)} nas últimas 24 horas")">
+                                                        <span class="maquete-heat-halo" aria-hidden="true"></span>
+                                                        <span class="maquete-marker-label">@sensorName</span>
+                                                    </div>
+                                                }
+                                            }
+                                            @foreach (var marker in LuminaireMarkers)
+                                            {
+                                                var luminaire = GetMapLuminaire(marker.Number);
+                                                if (luminaire is not null)
+                                                {
+                                                    <div class="maquete-marker maquete-led @(luminaire.BrightnessPercentage is > 0 ? "has-brightness" : "") @(luminaire.BrightnessPercentage is >= 50 ? "is-boosted" : "") @(marker.LabelBelow ? "label-below" : "label-above")"
+                                                         style="@($"left: {marker.X}%; top: {marker.Y}%;")"
+                                                         title="@($"{luminaire.Name} · último brilho registrado: {FormatBrightness(luminaire)}")"
+                                                         role="img"
+                                                         aria-label="@($"{luminaire.Name}, último brilho registrado: {FormatBrightness(luminaire)}")">
+                                                        <span class="maquete-marker-label">@luminaire.Name</span>
+                                                    </div>
+                                                }
+                                            }
+                                        </div>
+                                        <div class="maquete-map-legend">
+                                            <span><b class="maquete-legend-sensor"></b> Sensores: manchas maiores e mais quentes mostram maior atividade</span>
+                                            <span><b class="maquete-legend-led"></b> LEDs (último brilho registrado): cinza = 0% ou sem registro; amarelo = 1% a 49%; amarelo forte = 50% a 100%</span>
+                                        </div>
+                                    </div>
+                                }
+                                <div class="@(IsMaqueteMap ? "project-map-activity" : "")">
+                                    <h3 class="project-heat-subtitle">Atividade por zona</h3>
+                                    <div class="project-heat-grid">
+                                        @foreach (var zone in projectDashboardVM.Zones.OrderBy(zone => zone.DisplayOrder))
+                                        {
+                                            <div class="project-heat-zone @GetZoneActivityClass(zone.ZoneId)">
+                                                <strong>@zone.Name</strong>
+                                                <span>@FormatZoneEventCount(zone.ZoneId)</span>
+                                            </div>
+                                        }
+                                    </div>
+                                    <p class="rz-text-secondary mt-3 mb-0">A cor compara o volume de registros entre as zonas neste período. Se não há registros recentes, as zonas aparecem sem atividade.</p>
+                                </div>
+                            </div>
+                        }
                     </RadzenCard>
                 </div>
             </div>

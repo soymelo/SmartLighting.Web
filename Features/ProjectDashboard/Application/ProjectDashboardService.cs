@@ -30,7 +30,12 @@ public class ProjectDashboardService(IApiClient apiClient) : ServiceBase
                         zone.Name,
                         zone.DisplayOrder,
                         zone.Sensors.Count,
-                        zone.Luminaires.Count))
+                        zone.Luminaires.Count,
+                        zone.Sensors.Select(sensor => new ProjectSensorVMList(
+                            sensor.SensorId,
+                            sensor.DeviceId,
+                            sensor.Name)).ToArray(),
+                        zone.Luminaires.Select(luminaire => luminaire.LuminaireId).ToArray()))
                     .ToArray(),
                 dashboard.Zones
                     .SelectMany(zone => zone.Luminaires.Select(luminaire => (ZoneName: zone.Name, Luminaire: luminaire)))
@@ -50,10 +55,15 @@ public class ProjectDashboardService(IApiClient apiClient) : ServiceBase
                 dashboard.RecentSensorEvents
                     .Select(sensorEvent => new ProjectSensorEventVMList(
                         sensorEvent.EventIdentifier,
+                        sensorEvent.SensorId,
+                        sensorEvent.DeviceId,
                         sensorEvent.SensorName,
                         sensorEvent.ZoneName,
                         deviceNames.GetValueOrDefault(sensorEvent.DeviceId, "Controlador não identificado"),
                         sensorEvent.OccurredAtUtc))
+                    .ToArray(),
+                dashboard.ZoneActivity24h
+                    .Select(item => new ProjectZoneActivityVMList(item.ZoneId, item.EventCount))
                     .ToArray());
         });
     }

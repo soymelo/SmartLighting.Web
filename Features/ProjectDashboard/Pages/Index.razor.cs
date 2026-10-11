@@ -50,6 +50,8 @@ public partial class Index
     private bool isNotFound;
     private string? errorMessage;
     private ProjectDashboardVMList? projectDashboardVM;
+    private int? sensorEventsTotalCount;
+    private bool sensorEventsLoadFinished;
 
     private int luminairesWithStateCount =>
         projectDashboardVM?.Luminaires.Count(luminaire => luminaire.BrightnessPercentage is not null) ?? 0;
@@ -112,6 +114,8 @@ public partial class Index
         isNotFound = false;
         errorMessage = null;
         projectDashboardVM = null;
+        sensorEventsTotalCount = null;
+        sensorEventsLoadFinished = false;
 
         try
         {
@@ -144,6 +148,12 @@ public partial class Index
     private void OpenDevice(Guid deviceId)
     {
         Nav.NavigateTo($"/devices/{deviceId}");
+    }
+
+    private void OnSensorEventsTotalCountChanged(int? count)
+    {
+        sensorEventsTotalCount = count;
+        sensorEventsLoadFinished = true;
     }
 
     private void CreateDevice()

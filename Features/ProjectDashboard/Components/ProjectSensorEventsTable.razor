@@ -1,18 +1,25 @@
 @using SmartLighting.Web.Features.ProjectDashboard.Contracts.ViewModels
 
-@if (Events.Count == 0)
+@if (errorMessage is not null)
 {
-    <RadzenAlert AlertStyle="AlertStyle.Info">Nenhuma detecção de sensor recebida neste projeto.</RadzenAlert>
+    <RadzenAlert AlertStyle="AlertStyle.Warning" class="mb-2">@errorMessage</RadzenAlert>
+}
+else if (!hasLoadedFirstPage)
+{
+    <RadzenProgressBar Mode="ProgressBarMode.Indeterminate" ShowValue="false" />
 }
 else
 {
     <div class="overflow-auto">
-        <RadzenDataGrid Data="@Events" TItem="ProjectSensorEventVMList" AllowPaging="false" AllowSorting="false" Style="min-width: 560px;">
+        <RadzenDataGrid Data="@events" Count="@totalCount" TItem="ProjectSensorEventVMList"
+                        AllowPaging="true" PageSize="10" AllowSorting="true" LoadData="@LoadData"
+                        IsLoading="@isLoading" EmptyText="Nenhuma detecção de sensor recebida neste projeto."
+                        Style="min-width: 560px;">
             <Columns>
                 <RadzenDataGridColumn TItem="ProjectSensorEventVMList" Property="SensorName" Title="Sensor" Width="120px" />
                 <RadzenDataGridColumn TItem="ProjectSensorEventVMList" Property="ZoneName" Title="Zona" Width="100px" />
                 <RadzenDataGridColumn TItem="ProjectSensorEventVMList" Property="DeviceName" Title="Controlador" Width="145px" />
-                <RadzenDataGridColumn TItem="ProjectSensorEventVMList" Title="Data e hora" Width="165px">
+                <RadzenDataGridColumn TItem="ProjectSensorEventVMList" Property="OccurredAtUtc" Title="Data e hora" Width="165px" SortOrder="SortOrder.Descending">
                     <Template Context="row">
                         @ProjectDashboardDateFormatter.Format(row.OccurredAtUtc)
                     </Template>

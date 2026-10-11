@@ -6,6 +6,36 @@ namespace SmartLighting.Web.Features.ProjectDashboard.Application;
 
 public class ProjectDashboardService(IApiClient apiClient) : ServiceBase
 {
+    public async Task<ServiceResult<ProjectSensorEventsPageVM>> GetSensorEventsAsync(
+        Guid projectId, int page, int pageSize, string sortBy, bool descending,
+        IReadOnlyCollection<ProjectDeviceVMList> devices)
+    {
+        var endpoint = $"/projects/{projectId}/sensor-events";
+        var parameters = new Dictionary<string, string?>
+        {
+            ["page"] = page.ToString(),
+            ["pageSize"] = pageSize.ToString(),
+            ["sortBy"] = sortBy,
+            ["descending"] = descending.ToString().ToLowerInvariant()
+        };
+        var response = await apiClient.GetAsync<GetProjectSensorEventsPageDto>(endpoint, parameters);
+
+        return FromApiResponse(response, result =>
+        {
+            var deviceNames = devices.ToDictionary(device => device.DeviceId, device => device.Name);
+            return new ProjectSensorEventsPageVM(
+                result.TotalCount,
+                result.Items.Select(item => new ProjectSensorEventVMList(
+                    item.EventIdentifier,
+                    item.SensorId,
+                    item.DeviceId,
+                    item.SensorName,
+                    item.ZoneName,
+                    deviceNames.GetValueOrDefault(item.DeviceId, "Controlador não identificado"),
+                    item.OccurredAtUtc)).ToArray());
+        });
+    }
+
     public async Task<ServiceResult<ProjectDashboardVMList>> GetProjectDashboardAsync(Guid projectId)
     {
         var endpoint = $"/projects/{projectId}/dashboard";
@@ -51,16 +81,6 @@ public class ProjectDashboardService(IApiClient apiClient) : ServiceBase
                             luminaire.BrightnessPercentage,
                             luminaire.UpdatedAtUtc);
                     })
-                    .ToArray(),
-                dashboard.RecentSensorEvents
-                    .Select(sensorEvent => new ProjectSensorEventVMList(
-                        sensorEvent.EventIdentifier,
-                        sensorEvent.SensorId,
-                        sensorEvent.DeviceId,
-                        sensorEvent.SensorName,
-                        sensorEvent.ZoneName,
-                        deviceNames.GetValueOrDefault(sensorEvent.DeviceId, "Controlador não identificado"),
-                        sensorEvent.OccurredAtUtc))
                     .ToArray(),
                 dashboard.ZoneActivity24h
                     .Select(item => new ProjectZoneActivityVMList(item.ZoneId, item.EventCount))

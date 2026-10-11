@@ -7,17 +7,17 @@
 else
 {
     <div class="overflow-auto">
-        <RadzenDataGrid Data="@Luminaires" TItem="ProjectLuminaireVMList" AllowPaging="false" AllowSorting="false" Style="min-width: 780px;">
+        <RadzenDataGrid Data="@Luminaires" TItem="ProjectLuminaireVMList" AllowPaging="true" PageSize="10" AllowSorting="true" Style="min-width: 780px;">
             <Columns>
                 <RadzenDataGridColumn TItem="ProjectLuminaireVMList" Property="Name" Title="Luminária" />
                 <RadzenDataGridColumn TItem="ProjectLuminaireVMList" Property="ZoneName" Title="Zonas" />
                 <RadzenDataGridColumn TItem="ProjectLuminaireVMList" Property="DeviceName" Title="Controlador" />
-                <RadzenDataGridColumn TItem="ProjectLuminaireVMList" Title="Brilho">
+                <RadzenDataGridColumn TItem="ProjectLuminaireVMList" Property="BrightnessPercentage" Title="Brilho">
                     <Template Context="row">
                         @(row.BrightnessPercentage is null ? "Sem estado recebido" : $"{row.BrightnessPercentage}%")
                     </Template>
                 </RadzenDataGridColumn>
-                <RadzenDataGridColumn TItem="ProjectLuminaireVMList" Title="Última atualização">
+                <RadzenDataGridColumn TItem="ProjectLuminaireVMList" Property="UpdatedAtUtc" Title="Última atualização">
                     <Template Context="row">
                         @(row.UpdatedAtUtc is null
                             ? "Sem estado recebido"

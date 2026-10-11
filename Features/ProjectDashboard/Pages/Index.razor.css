@@ -119,7 +119,7 @@
 
 .project-map-layout {
     display: grid;
-    grid-template-columns: minmax(0, 680px) minmax(320px, 480px);
+    grid-template-columns: minmax(0, 620px) minmax(320px, 480px);
     align-items: start;
     justify-content: center;
     gap: 1.5rem;
@@ -136,7 +136,7 @@
 
 .maquete-map {
     position: relative;
-    width: min(100%, 680px);
+    width: min(100%, 620px);
     margin: 0 auto 0.75rem;
     overflow: hidden;
     border: 1px solid rgba(255, 255, 255, 0.16);

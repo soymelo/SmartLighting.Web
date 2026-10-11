@@ -7,17 +7,17 @@
 else
 {
     <div class="overflow-auto">
-        <RadzenDataGrid Data="@Devices" TItem="ProjectDeviceVMList" AllowPaging="false" AllowSorting="false" Style="min-width: 520px;">
+        <RadzenDataGrid Data="@Devices" TItem="ProjectDeviceVMList" AllowPaging="true" PageSize="5" AllowSorting="true" Style="min-width: 520px;">
             <Columns>
                 <RadzenDataGridColumn TItem="ProjectDeviceVMList" Property="Name" Title="Controlador" />
-                <RadzenDataGridColumn TItem="ProjectDeviceVMList" Title="Último contato">
+                <RadzenDataGridColumn TItem="ProjectDeviceVMList" Property="LastTelemetryAtUtc" Title="Último contato">
                     <Template Context="row">
                         @(row.LastTelemetryAtUtc is null
                             ? "Nenhum contato registrado"
                             : $"{ProjectDashboardDateFormatter.Format(row.LastTelemetryAtUtc.Value)} (horário)")
                     </Template>
                 </RadzenDataGridColumn>
-                <RadzenDataGridColumn TItem="ProjectDeviceVMList" Title="Detalhes" Width="100px">
+                <RadzenDataGridColumn TItem="ProjectDeviceVMList" Title="Detalhes" Width="100px" Sortable="false">
                     <Template Context="row">
                         <RadzenButton Text="Abrir" ButtonStyle="ButtonStyle.Light" Size="ButtonSize.Small"
                                       Click="@(() => OpenDevice.InvokeAsync(row.DeviceId))" />

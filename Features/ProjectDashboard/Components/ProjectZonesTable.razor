@@ -7,7 +7,7 @@
 else
 {
     <div class="overflow-auto">
-        <RadzenDataGrid Data="@Zones" TItem="ProjectZoneVMList" AllowPaging="false" AllowSorting="false" Style="min-width: 420px;">
+        <RadzenDataGrid Data="@Zones" TItem="ProjectZoneVMList" AllowPaging="true" PageSize="10" AllowSorting="true" Style="min-width: 420px;">
             <Columns>
                 <RadzenDataGridColumn TItem="ProjectZoneVMList" Property="Name" Title="Zona" />
                 <RadzenDataGridColumn TItem="ProjectZoneVMList" Property="SensorCount" Title="Sensores" />

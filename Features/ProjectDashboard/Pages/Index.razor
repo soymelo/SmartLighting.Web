@@ -109,12 +109,14 @@
                         <div class="d-flex align-items-start gap-3">
                             <div class="project-summary-icon"><RadzenIcon Icon="radar" /></div>
                             <div class="min-width-0">
-                                <RadzenText TextStyle="TextStyle.Body2" class="rz-text-secondary mb-2">Eventos recentes</RadzenText>
+                                <RadzenText TextStyle="TextStyle.Body2" class="rz-text-secondary mb-2">Eventos dos sensores</RadzenText>
                                 <RadzenText TextStyle="TextStyle.H5" class="project-summary-value mb-1">
-                                    @projectDashboardVM.RecentSensorEvents.Count exibidos
+                                    @(sensorEventsTotalCount is int count
+                                        ? $"{count:N0} registrados"
+                                        : sensorEventsLoadFinished ? "Indisponível" : "Carregando eventos")
                                 </RadzenText>
                                 <RadzenText TextStyle="TextStyle.Caption" class="rz-text-secondary mb-0">
-                                    Até 50 eventos mais recentes do projeto
+                                    Histórico do projeto disponível na tabela abaixo
                                 </RadzenText>
                             </div>
                         </div>
@@ -259,11 +261,12 @@
                         <div class="d-flex align-items-start gap-3 mb-3">
                             <RadzenIcon Icon="sensors" class="project-section-icon" />
                             <div>
-                                <RadzenText TextStyle="TextStyle.H5" class="mb-1">Eventos recentes dos sensores</RadzenText>
-                                <RadzenText TextStyle="TextStyle.Body2" class="rz-text-secondary mb-0">Detecções dos controladores do projeto.</RadzenText>
+                                <RadzenText TextStyle="TextStyle.H5" class="mb-1">Histórico dos sensores</RadzenText>
+                                <RadzenText TextStyle="TextStyle.Body2" class="rz-text-secondary mb-0">Registros dos controladores do projeto.</RadzenText>
                             </div>
                         </div>
-                        <ProjectRecentSensorEventsTable Events="@projectDashboardVM.RecentSensorEvents" />
+                        <ProjectSensorEventsTable ProjectId="@ProjectId" Devices="@projectDashboardVM.Devices"
+                                                  TotalCountChanged="@OnSensorEventsTotalCountChanged" />
                     </RadzenCard>
                 </div>
             </div>

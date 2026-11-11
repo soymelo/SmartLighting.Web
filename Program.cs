@@ -1,7 +1,6 @@
 using Radzen;
 using SmartLighting.Web.Components;
 using SmartLighting.Web.Features.Devices.Application;
-using SmartLighting.Web.Features.MachineLearning.Application;
 using SmartLighting.Web.Features.ProjectDashboard.Application;
 using SmartLighting.Web.Features.Projects.Application;
 using SmartLighting.Web.Infrastructure;
@@ -21,7 +20,6 @@ builder.Services.AddHttpClient<IApiClient, ApiClient>((services, httpClient) =>
 });
 
 builder.Services.AddScoped<DeviceService>();
-builder.Services.AddScoped<MlDemoService>();
 builder.Services.AddScoped<ProjectDashboardService>();
 builder.Services.AddScoped<ProjectService>();
 

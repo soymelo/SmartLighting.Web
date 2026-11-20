@@ -8,20 +8,21 @@ namespace SmartLighting.Web.Features.ProjectDashboard.Pages;
 public partial class Index
 {
     private static readonly TimeSpan OnlineThreshold = TimeSpan.FromMinutes(5);
-    // Posições dos componentes indicadas pela equipe na imagem de referência da maquete.
+    // Centros dos marcadores na referência de 623 x 464 px, convertidos em porcentagem.
+    // Para ajustar: X = pixel horizontal / 623 * 100; Y = pixel vertical / 464 * 100.
     private static readonly MapMarker[] SensorMarkers =
     [
-        new(1, 22, 66, true), new(2, 52, 71, true), new(3, 83, 66, true),
-        new(4, 82, 21, false), new(5, 52, 21, false), new(6, 20, 24, false)
+        new(1, 23.5, 68.5, true), new(2, 52.0, 68.5, true), new(3, 80, 68.5, true),
+        new(4, 80, 23, false), new(5, 52.0, 23, false), new(6, 23.5, 23, false)
     ];
 
     private static readonly MapMarker[] LuminaireMarkers =
     [
-        new(1, 27, 63, false), new(2, 44, 65, false),
-        new(3, 63, 65, false), new(4, 78, 63, false),
-        new(5, 74, 44, true), new(6, 76, 27, true),
-        new(7, 62, 30, true), new(8, 41, 30, true),
-        new(9, 25, 27, true), new(10, 23, 44, true)
+        new(1, 25.5, 65, false), new(2, 44.0, 65, false),
+        new(3, 62.9, 65, false), new(4, 77.8, 65, false),
+        new(5, 77.8, 43.5, true), new(6, 77.8, 26, true),
+        new(7, 62.0, 26, true), new(8, 41.1, 26, true),
+        new(9, 25.5, 26, true), new(10, 25.5, 43.5, true)
     ];
 
     // Identidades dos LEDs da maquete atual. O nome pode mudar sem deslocar o ponto no mapa.
@@ -39,7 +40,10 @@ public partial class Index
         Guid.Parse("f03b7f1b-aa0c-4e93-bbb3-2388efd6e73f")
     ];
 
-    private sealed record MapMarker(int Number, int X, int Y, bool LabelBelow);
+    private sealed record MapMarker(int Number, double X, double Y, bool LabelBelow)
+    {
+        public string Style => FormattableString.Invariant($"left: {X}%; top: {Y}%;");
+    }
 
     [Inject] private NavigationManager Nav { get; set; } = default!;
     [Inject] private ProjectDashboardService ProjectDashboardService { get; set; } = default!;

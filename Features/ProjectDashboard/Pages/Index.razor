@@ -159,7 +159,7 @@
                                                 {
                                                     var sensorName = zone.Sensors.Single().Name;
                                                     <div class="maquete-marker maquete-sensor @GetZoneActivityClass(zone.ZoneId) @(marker.LabelBelow ? "label-below" : "label-above")"
-                                                         style="@($"left: {marker.X}%; top: {marker.Y}%;")"
+                                                         style="@marker.Style"
                                                          title="@($"{sensorName} · {zone.Name}: {FormatZoneEventCount(zone.ZoneId)} nas últimas 24 horas")"
                                                          role="img"
                                                          aria-label="@($"{sensorName}, {zone.Name}, {FormatZoneEventCount(zone.ZoneId)} nas últimas 24 horas")">
@@ -174,7 +174,7 @@
                                                 if (luminaire is not null)
                                                 {
                                                     <div class="maquete-marker maquete-led @(luminaire.BrightnessPercentage is > 0 ? "has-brightness" : "") @(luminaire.BrightnessPercentage is >= 50 ? "is-boosted" : "") @(marker.LabelBelow ? "label-below" : "label-above")"
-                                                         style="@($"left: {marker.X}%; top: {marker.Y}%;")"
+                                                         style="@marker.Style"
                                                          title="@($"{luminaire.Name} · último brilho registrado: {FormatBrightness(luminaire)}")"
                                                          role="img"
                                                          aria-label="@($"{luminaire.Name}, último brilho registrado: {FormatBrightness(luminaire)}")">
